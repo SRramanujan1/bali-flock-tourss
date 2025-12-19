@@ -17,6 +17,14 @@ const STAG_SLIDESHOW_IMAGES = [
   'https://static.wixstatic.com/media/b57044_ca5963dfd2444835bfb805f9846dcc44~mv2.png?id=bucks-celebration',
 ];
 
+// Slideshow images for girls/hens escape packages
+const HENS_SLIDESHOW_IMAGES = [
+  'https://static.wixstatic.com/media/b57044_8f3c2e1a4d5b6c7e9f0a1b2c3d4e5f6g~mv2.png?id=girls-partying',
+  'https://static.wixstatic.com/media/b57044_7g4d3f2e5c6b8a9d0e1f2g3h4i5j6k7l~mv2.png?id=spa-massage',
+  'https://static.wixstatic.com/media/b57044_6h5e4g3f7d8c9b0a1f2g3h4i5j6k7l8m~mv2.png?id=hair-makeup',
+  'https://static.wixstatic.com/media/b57044_5i6f5h4g8e9d0c1b2g3h4i5j6k7l8m9n~mv2.png?id=bali-swing-instagram',
+];
+
 export default function PackagesPage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<HolidayPackages[]>([]);
@@ -185,11 +193,24 @@ export default function PackagesPage() {
               // Check if this is a stag party package
               const isStagPackage = pkg.packageName?.toLowerCase().includes('stag') || 
                                    pkg.packageName?.toLowerCase().includes('bucks');
-              const imagesToDisplay = isStagPackage && pkg.mainImage 
-                ? [pkg.mainImage, ...STAG_SLIDESHOW_IMAGES]
-                : pkg.mainImage 
-                ? [pkg.mainImage]
-                : [];
+              // Check if this is a hens/girls escape package
+              const isHensPackage = pkg.packageName?.toLowerCase().includes('hens') || 
+                                   pkg.packageName?.toLowerCase().includes('girls') ||
+                                   pkg.packageName?.toLowerCase().includes('escape');
+              
+              let imagesToDisplay: string[] = [];
+              let shouldAutoPlay = false;
+              
+              if (isStagPackage && pkg.mainImage) {
+                imagesToDisplay = [pkg.mainImage, ...STAG_SLIDESHOW_IMAGES];
+                shouldAutoPlay = true;
+              } else if (isHensPackage && pkg.mainImage) {
+                imagesToDisplay = [pkg.mainImage, ...HENS_SLIDESHOW_IMAGES];
+                shouldAutoPlay = true;
+              } else if (pkg.mainImage) {
+                imagesToDisplay = [pkg.mainImage];
+                shouldAutoPlay = false;
+              }
 
               return (
               <motion.div
@@ -204,7 +225,7 @@ export default function PackagesPage() {
                       alt={pkg.packageName || 'Package'}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       width={400}
-                      autoPlay={isStagPackage}
+                      autoPlay={shouldAutoPlay}
                       autoPlayInterval={3000}
                     />
                   ) : (
