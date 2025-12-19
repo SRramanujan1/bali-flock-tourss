@@ -208,6 +208,7 @@ export default function PackagesPage() {
                 imagesToDisplay = [pkg.mainImage, ...HENS_SLIDESHOW_IMAGES];
                 shouldAutoPlay = true;
               } else if (pkg.mainImage) {
+                // All other packages get a slideshow with just their main image
                 imagesToDisplay = [pkg.mainImage];
                 shouldAutoPlay = false;
               }
@@ -227,6 +228,7 @@ export default function PackagesPage() {
                       width={400}
                       autoPlay={shouldAutoPlay}
                       autoPlayInterval={3000}
+                      showNavigation={false}
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-300 flex items-center justify-center">

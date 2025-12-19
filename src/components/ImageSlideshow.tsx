@@ -10,6 +10,7 @@ interface ImageSlideshowProps {
   width?: number;
   autoPlay?: boolean;
   autoPlayInterval?: number;
+  showNavigation?: boolean;
 }
 
 export default function ImageSlideshow({
@@ -19,6 +20,7 @@ export default function ImageSlideshow({
   width = 400,
   autoPlay = true,
   autoPlayInterval = 3000,
+  showNavigation = true,
 }: ImageSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -85,7 +87,7 @@ export default function ImageSlideshow({
       </AnimatePresence>
 
       {/* Navigation Controls - Show on Hover */}
-      {isHovering && images.length > 1 && (
+      {isHovering && images.length > 1 && showNavigation && (
         <>
           {/* Previous Button */}
           <motion.button
