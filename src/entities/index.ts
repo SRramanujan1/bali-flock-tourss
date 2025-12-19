@@ -14,6 +14,8 @@ export interface Activities {
   /** @wixFieldType text */
   name?: string;
   /** @wixFieldType text */
+  currency?: string;
+  /** @wixFieldType text */
   description?: string;
   /** @wixFieldType number */
   pricePerPerson?: number;
@@ -23,8 +25,6 @@ export interface Activities {
   activityImage?: string;
   /** @wixFieldType text */
   location?: string;
-  /** @wixFieldType text */
-  currency?: string;
 }
 
 
