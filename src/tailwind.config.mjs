@@ -23,17 +23,17 @@ export default {
                 paragraph: "madefor-display"
             },
             colors: {
-                buttonborder: '#3B121B',
-                linktext: '#8A9FEF',
-                cardbackground: '#F5F5F7',
-                foreground: '#F5F5F7',
-                destructive: '#DF3131',
+                buttonborder: '#FF6B35',
+                linktext: '#FF6B35',
+                cardbackground: '#FFF5F0',
+                foreground: '#FFFFFF',
+                destructive: '#FF3366',
                 destructiveforeground: '#ffffff',
-                background: '#3B121B',
-                secondary: '#F5F5F7',
-                'secondary-foreground': '#3B121B',
-                'primary-foreground': '#8A9FEF',
-                primary: '#3B121B'
+                background: '#0F0F1E',
+                secondary: '#FFF5F0',
+                'secondary-foreground': '#0F0F1E',
+                'primary-foreground': '#FF6B35',
+                primary: '#0F0F1E'
             },
         },
     },
