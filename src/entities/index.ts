@@ -23,6 +23,8 @@ export interface Activities {
   activityImage?: string;
   /** @wixFieldType text */
   location?: string;
+  /** @wixFieldType text */
+  currency?: string;
 }
 
 
@@ -54,8 +56,6 @@ export interface Bookings {
   specialRequests?: string;
   /** @wixFieldType text */
   dietaryRestrictions?: string;
-  // Customization details stored as JSON string
-  customizationDetails?: string;
 }
 
 
@@ -87,31 +87,6 @@ export interface HolidayPackages {
   inclusions?: string;
 }
 
-/**
- * Collection ID: quotes
- * Interface for Custom Package Quotes
- */
-export interface Quotes {
-  _id: string;
-  _createdDate?: Date;
-  _updatedDate?: Date;
-  /** @wixFieldType text */
-  packageId?: string;
-  /** @wixFieldType text */
-  packageName?: string;
-  /** @wixFieldType text */
-  userEmail?: string;
-  /** @wixFieldType text */
-  dietaryRestrictions?: string;
-  /** @wixFieldType text */
-  specialRequests?: string;
-  /** @wixFieldType datetime */
-  expirationDate?: Date;
-  /** @wixFieldType text */
-  quoteStatus?: string;
-  // Customization details stored as JSON string
-  customizationDetails?: string;
-}
 
 /**
  * Collection ID: quotes
