@@ -50,7 +50,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950">
       <Header />
-
       {/* Hero Section with Video Background */}
       <section className="w-full py-24 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[800px] flex items-center justify-center">
         {/* Video Background Container */}
@@ -91,18 +90,13 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-
-
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6 leading-tight drop-shadow-lg">
               Welcome to Bali Flock Tours
             </h1>
             <p className="text-lg md:text-xl text-purple-100/95 mb-8 max-w-3xl mx-auto font-semibold leading-relaxed">
               We specialise in Safe, Supported, Fun & stress-free Group tours to Bali. Have it your way, with options for hens groups, bucks party's, boys trips/Girl trips & couples retreats we've got you covered.
             </p>
-            <p className="text-xl md:text-2xl text-purple-200/90 mb-8 max-w-3xl mx-auto font-semibold">
-              Epic beach clubs, unforgettable nights, and memories that last forever. Join the ultimate Bali party experience.
-            </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -131,34 +125,19 @@ export default function HomePage() {
             animate={{ y: [0, 20, 0], rotate: [0, 10, 0] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            <Music size={32} />
+
           </motion.div>
           <motion.div
             className="absolute top-32 right-10 text-cyan-400"
             animate={{ y: [0, -20, 0], rotate: [0, -10, 0] }}
             transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
           >
-            <Flame size={32} />
+
           </motion.div>
         </div>
       </section>
-
       {/* Featured Packages */}
       <section className="max-w-[100rem] mx-auto px-6 py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
-            Featured Party Packages
-          </h2>
-          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
-            Handpicked experiences designed to create unforgettable party memories
-          </p>
-        </motion.div>
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -232,7 +211,6 @@ export default function HomePage() {
             ))}
           </motion.div>
         )}
-
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -248,7 +226,6 @@ export default function HomePage() {
           </Link>
         </motion.div>
       </section>
-
       {/* Why Choose Us */}
       <section className="py-20 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-900/30 to-transparent"></div>
@@ -321,7 +298,6 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-cyan-600/20"></div>
@@ -365,7 +341,6 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
