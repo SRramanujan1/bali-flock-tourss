@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
             <h3 className="font-heading text-3xl text-primary-foreground mb-4">
-              Bali Bliss
+              Bali Flock Tours
             </h3>
             <p className="font-paragraph text-base text-foreground">
               Creating unforgettable group experiences in paradise
@@ -63,7 +63,7 @@ export default function Footer() {
         
         <div className="mt-12 pt-8 border-t border-buttonborder text-center">
           <p className="font-paragraph text-sm text-foreground">
-            © {new Date().getFullYear()} Bali Bliss. All rights reserved.
+            © {new Date().getFullYear()} Bali Flock Tours. All rights reserved.
           </p>
         </div>
       </div>

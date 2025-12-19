@@ -5,7 +5,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-sm">
       <div className="max-w-[120rem] mx-auto px-6 py-5 flex justify-between items-center">
         <Link to="/" className="font-heading text-4xl text-primary-foreground hover:opacity-80 transition-opacity">
-          Bali Bliss
+          Bali Flock Tours
         </Link>
         
         <nav className="flex items-center gap-8">
