@@ -94,8 +94,11 @@ export default function HomePage() {
 
 
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6 leading-tight drop-shadow-lg">
-              Experience Bali's Ultimate Party Scene
+              Welcome to Bali Flock Tours
             </h1>
+            <p className="text-lg md:text-xl text-purple-100/95 mb-8 max-w-3xl mx-auto font-semibold leading-relaxed">
+              We specialise in Safe, Supported, Fun & stress-free Group tours to Bali. Have it your way, with options for hens groups, bucks party's, boys trips/Girl trips & couples retreats we've got you covered.
+            </p>
             <p className="text-xl md:text-2xl text-purple-200/90 mb-8 max-w-3xl mx-auto font-semibold">
               Epic beach clubs, unforgettable nights, and memories that last forever. Join the ultimate Bali party experience.
             </p>
