@@ -4,14 +4,19 @@ import { motion } from 'framer-motion';
 import { Calendar, Trash2, Eye, Download, AlertCircle } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { useMember } from '@/integrations';
-import { Quotes } from '@/entities';
+import { CustomPackageQuotes } from '@/entities';
 import { MemberProtectedRoute } from '@/components/ui/member-protected-route';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 
-interface QuoteWithCustomization extends Quotes {
+interface QuoteWithCustomization extends CustomPackageQuotes {
   customization?: any;
+  customizationDetails?: string;
+}
+
+interface CustomPackageQuotesWithDetails extends CustomPackageQuotes {
+  customizationDetails?: string;
 }
 
 function MyQuotesContent() {
@@ -26,7 +31,7 @@ function MyQuotesContent() {
       if (!member?.loginEmail) return;
 
       try {
-        const { items } = await BaseCrudService.getAll<Quotes>('quotes');
+        const { items } = await BaseCrudService.getAll<CustomPackageQuotesWithDetails>('quotes');
         const userQuotes = items
           .filter((q) => q.userEmail === member.loginEmail)
           .map((q) => ({
@@ -100,7 +105,7 @@ This quote is valid until ${new Date(quote.expirationDate || '').toLocaleDateStr
     document.body.removeChild(element);
   };
 
-  const isQuoteExpired = (expirationDate: Date | undefined) => {
+  const isQuoteExpired = (expirationDate: Date | string | undefined) => {
     if (!expirationDate) return false;
     return new Date() > new Date(expirationDate);
   };

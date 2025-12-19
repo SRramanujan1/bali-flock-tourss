@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Mail, Download, CheckCircle2, AlertCircle, Save } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { useMember } from '@/integrations';
-import { HolidayPackages, Activities, Quotes } from '@/entities';
+import { HolidayPackages, Activities, CustomPackageQuotes } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
@@ -152,7 +152,7 @@ ${itinerary}`;
       const expirationDate = new Date();
       expirationDate.setMonth(expirationDate.getMonth() + 2);
 
-      const quote: Quotes = {
+      const quote: CustomPackageQuotes & { customizationDetails: string } = {
         _id: crypto.randomUUID(),
         packageId: id || '',
         packageName: pkg?.packageName || '',

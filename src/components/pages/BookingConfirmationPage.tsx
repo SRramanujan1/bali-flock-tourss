@@ -8,9 +8,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 
+interface BookingWithCustomization extends Bookings {
+  customizationDetails?: string;
+}
+
 export default function BookingConfirmationPage() {
   const [searchParams] = useSearchParams();
-  const [booking, setBooking] = useState<Bookings | null>(null);
+  const [booking, setBooking] = useState<BookingWithCustomization | null>(null);
   const [loading, setLoading] = useState(true);
 
   const bookingId = searchParams.get('id');
@@ -23,7 +27,7 @@ export default function BookingConfirmationPage() {
       }
 
       try {
-        const bookingData = await BaseCrudService.getById<Bookings>('bookings', bookingId);
+        const bookingData = await BaseCrudService.getById<BookingWithCustomization>('bookings', bookingId);
         setBooking(bookingData);
       } catch (error) {
         console.error('Error fetching booking:', error);

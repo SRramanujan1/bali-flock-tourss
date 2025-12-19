@@ -52,13 +52,20 @@ export default function HomePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-gradient-to-br from-primary via-secondary to-accent py-24 md:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 right-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 left-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+      <section className="w-full py-24 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://static.wixstatic.com/media/b57044_fbabae529fc64051b970f94fc050e9d7~mv2.png?id=beach-club-hero"
+            alt="Bali beach club"
+            className="w-full h-full object-cover"
+            width={1600}
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
-        <div className="max-w-[100rem] mx-auto px-6 relative z-10">
+        <div className="max-w-[100rem] mx-auto px-6 relative z-10 w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
