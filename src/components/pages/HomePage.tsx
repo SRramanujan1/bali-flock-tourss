@@ -6,7 +6,7 @@ import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
-import { ArrowRight, Star, Sun, Moon, Users, Heart, GlassWater } from 'lucide-react';
+import { ArrowRight, Star, Sun, Moon, Users, Heart, GlassWater, Music, Sparkles } from 'lucide-react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 // --- Types ---
@@ -145,25 +145,25 @@ export default function HomePage() {
   `;
 
   return (
-    <div className="min-h-screen bg-primary text-foreground overflow-clip selection:bg-primary-foreground selection:text-primary">
+    <div className="min-h-screen bg-primary text-secondary-foreground overflow-clip selection:bg-primary-foreground selection:text-primary">
       <style>{customStyles}</style>
       <Header />
 
-      {/* --- HERO SECTION (Inspiration Image Replication) --- */}
-      {/* Structure: Full bleed, massive text layer, central image layer, script overlay layer */}
-      <section className="relative w-full min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden">
+      {/* --- HERO SECTION (Instagram-inspired Modern Design) --- */}
+      {/* Structure: Clean, minimal, focused on imagery and typography */}
+      <section className="relative w-full min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden bg-gradient-to-b from-primary to-secondary">
         
         {/* Layer 1: Background Marquee/Texture */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-           <div className="absolute top-1/4 w-full h-px bg-gradient-to-r from-transparent via-primary-foreground to-transparent" />
-           <div className="absolute bottom-1/4 w-full h-px bg-gradient-to-r from-transparent via-primary-foreground to-transparent" />
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+           <div className="absolute top-1/4 w-full h-px bg-gradient-to-r from-transparent via-secondary-foreground to-transparent" />
+           <div className="absolute bottom-1/4 w-full h-px bg-gradient-to-r from-transparent via-secondary-foreground to-transparent" />
         </div>
 
         {/* Layer 2: Massive Structural Typography (Behind Image) */}
         <div className="absolute inset-0 flex flex-col justify-center items-center z-0 pointer-events-none">
           <div className="w-full max-w-[120rem] px-4 flex justify-between items-center">
-             <h1 className="font-paragraph text-[12vw] leading-[0.8] text-primary-foreground uppercase tracking-tighter text-center w-full mix-blend-overlay opacity-50">
-               BALI <span className="text-stroke">BY</span> DESIGN
+             <h1 className="font-paragraph text-[12vw] leading-[0.8] text-secondary-foreground uppercase tracking-tighter text-center w-full mix-blend-overlay opacity-20">
+               BALI NIGHTS
              </h1>
           </div>
         </div>
@@ -174,11 +174,11 @@ export default function HomePage() {
           {/* Left Floating Element */}
           <div className="absolute left-4 md:left-20 top-1/4 w-48 md:w-64 aspect-[3/4] hidden md:block">
             <AnimatedElement delay={200}>
-              <div className="relative w-full h-full overflow-hidden border border-primary-foreground/20">
+              <div className="relative w-full h-full overflow-hidden border-2 border-secondary-foreground/20">
                 <Image 
                   src="https://static.wixstatic.com/media/b57044_2c00f12a4f7a4f14a0bd52a05ff402e2~mv2.png?originWidth=576&originHeight=640" 
-                  alt="Bali texture detail"
-                  className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity duration-700"
+                  alt="Bali nightlife detail"
+                  className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-700"
                   width={300}
                 />
               </div>
@@ -188,25 +188,25 @@ export default function HomePage() {
           {/* Center Main Image */}
           <div className="relative w-[90vw] md:w-[35vw] h-[60vh] md:h-[80vh] z-20">
             <AnimatedElement>
-              <div className="w-full h-full overflow-hidden shadow-2xl shadow-black/50">
+              <div className="w-full h-full overflow-hidden shadow-lg shadow-secondary-foreground/20">
                 <ParallaxImage 
                   src="https://static.wixstatic.com/media/b57044_785ebfbdd3c9483b8e0047c2f223f49b~mv2.png?originWidth=576&originHeight=640"
-                  alt="Main Bali Portrait"
+                  alt="Bali Nightlife Portrait"
                   speed={1.1}
                   className="w-full h-full"
                 />
               </div>
             </AnimatedElement>
             
-            {/* Script Overlays (Inspiration Motif) */}
-            <div className="absolute -left-12 md:-left-32 top-1/3 z-30 mix-blend-difference">
+            {/* Script Overlays (Modern Motif) */}
+            <div className="absolute -left-12 md:-left-32 top-1/3 z-30 mix-blend-multiply">
               <AnimatedElement delay={400}>
-                <span className="font-heading text-[5rem] md:text-[8rem] text-primary-foreground leading-none">Pure</span>
+                <span className="font-heading text-[5rem] md:text-[8rem] text-primary-foreground leading-none font-bold">Nights</span>
               </AnimatedElement>
             </div>
-            <div className="absolute -right-12 md:-right-32 bottom-1/4 z-30 mix-blend-difference">
+            <div className="absolute -right-12 md:-right-32 bottom-1/4 z-30 mix-blend-multiply">
               <AnimatedElement delay={600}>
-                <span className="font-heading text-[5rem] md:text-[8rem] text-primary-foreground leading-none">Bliss</span>
+                <span className="font-heading text-[5rem] md:text-[8rem] text-primary-foreground leading-none font-bold">Vibes</span>
               </AnimatedElement>
             </div>
           </div>
@@ -214,11 +214,11 @@ export default function HomePage() {
           {/* Right Floating Element */}
           <div className="absolute right-4 md:right-20 bottom-1/4 w-48 md:w-64 aspect-square hidden md:block">
             <AnimatedElement delay={300}>
-              <div className="relative w-full h-full overflow-hidden rounded-full border border-primary-foreground/20">
+              <div className="relative w-full h-full overflow-hidden rounded-full border-2 border-secondary-foreground/20">
                 <Image 
                   src="https://static.wixstatic.com/media/b57044_52a291d8e2b5496d876f249b1a3e1361~mv2.png?originWidth=576&originHeight=640" 
-                  alt="Bali texture detail"
-                  className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity duration-700"
+                  alt="Bali nightlife detail"
+                  className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-700"
                   width={300}
                 />
               </div>
@@ -417,6 +417,141 @@ export default function HomePage() {
       {/* --- MARQUEE BREAK --- */}
       <section className="py-12 border-y border-primary-foreground/10">
         <MarqueeText text="ESCAPE THE ORDINARY" />
+      </section>
+
+      {/* --- NIGHTLIFE SECTION (New: Finns Beach Club & Nightlife Content) --- */}
+      <section className="py-32 px-6 max-w-[120rem] mx-auto">
+        <AnimatedElement>
+          <div className="text-center mb-24">
+            <span className="font-heading text-4xl text-primary-foreground block mb-4">Experience the Night</span>
+            <h2 className="font-paragraph text-5xl md:text-7xl uppercase text-secondary-foreground">
+              Bali's Most <span className="text-primary-foreground font-bold">Iconic Nightlife</span>
+            </h2>
+          </div>
+        </AnimatedElement>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24">
+          {/* Finns Beach Club Feature */}
+          <AnimatedElement>
+            <div className="relative overflow-hidden rounded-lg shadow-lg">
+              <Image 
+                src="https://static.wixstatic.com/media/b57044_de84092212cd43c3aeb86b7b0bf56a19~mv2.png?originWidth=768&originHeight=768"
+                alt="Finns Beach Club Bali"
+                className="w-full h-[400px] object-cover"
+                width={600}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </div>
+          </AnimatedElement>
+
+          <AnimatedElement delay={100}>
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <Music className="w-6 h-6 text-primary-foreground" />
+                <span className="font-paragraph text-sm uppercase tracking-widest text-primary-foreground font-bold">Featured Venue</span>
+              </div>
+              <h3 className="font-paragraph text-5xl md:text-6xl uppercase text-secondary-foreground mb-6 leading-tight">
+                Finns Beach Club
+              </h3>
+              <p className="font-paragraph text-lg text-secondary-foreground/80 leading-relaxed mb-8">
+                The ultimate beachfront destination for unforgettable nights. Finns Beach Club combines world-class DJs, premium cocktails, and stunning ocean views. Whether you're looking for a sunset aperitif or an all-night dance experience, Finns delivers the perfect backdrop for your Bali adventure.
+              </p>
+              <div className="space-y-4 mb-8">
+                <div className="flex gap-4">
+                  <Sparkles className="w-5 h-5 text-primary-foreground flex-shrink-0 mt-1" />
+                  <div>
+                    <h4 className="font-paragraph font-bold text-secondary-foreground mb-1">VIP Tables & Bottle Service</h4>
+                    <p className="text-secondary-foreground/70 text-sm">Premium seating with dedicated service</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <Music className="w-5 h-5 text-primary-foreground flex-shrink-0 mt-1" />
+                  <div>
+                    <h4 className="font-paragraph font-bold text-secondary-foreground mb-1">International DJs</h4>
+                    <p className="text-secondary-foreground/70 text-sm">Top electronic and house music artists</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <GlassWater className="w-5 h-5 text-primary-foreground flex-shrink-0 mt-1" />
+                  <div>
+                    <h4 className="font-paragraph font-bold text-secondary-foreground mb-1">Signature Cocktails</h4>
+                    <p className="text-secondary-foreground/70 text-sm">Expertly crafted drinks with premium spirits</p>
+                  </div>
+                </div>
+              </div>
+              <Link 
+                to="/packages"
+                className="inline-flex items-center gap-3 bg-primary-foreground text-white font-paragraph text-sm uppercase px-8 py-4 hover:opacity-90 transition-opacity duration-300 font-bold"
+              >
+                Book Your Night
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </AnimatedElement>
+        </div>
+
+        {/* Nightlife Highlights Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Card 1: Beach Clubs */}
+          <AnimatedElement>
+            <div className="group cursor-pointer">
+              <div className="relative overflow-hidden rounded-lg mb-6 h-[300px]">
+                <Image 
+                  src="https://static.wixstatic.com/media/b57044_9bb39b3f9b224b2abe8009eb905277e8~mv2.png?originWidth=576&originHeight=896"
+                  alt="Beach Clubs"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  width={400}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+              <h3 className="font-paragraph text-2xl uppercase text-secondary-foreground mb-3 group-hover:text-primary-foreground transition-colors">Beach Clubs</h3>
+              <p className="text-secondary-foreground/70 mb-4">Sunset vibes, ocean breeze, and world-class entertainment. Experience Bali's most exclusive beachfront venues.</p>
+              <span className="inline-flex items-center gap-2 text-primary-foreground font-bold text-sm uppercase">
+                Explore <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </AnimatedElement>
+
+          {/* Card 2: Rooftop Bars */}
+          <AnimatedElement delay={100}>
+            <div className="group cursor-pointer">
+              <div className="relative overflow-hidden rounded-lg mb-6 h-[300px]">
+                <Image 
+                  src="https://static.wixstatic.com/media/b57044_9e40cb854fd54a3285d4b920940cb196~mv2.png?originWidth=576&originHeight=896"
+                  alt="Rooftop Bars"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  width={400}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+              <h3 className="font-paragraph text-2xl uppercase text-secondary-foreground mb-3 group-hover:text-primary-foreground transition-colors">Rooftop Bars</h3>
+              <p className="text-secondary-foreground/70 mb-4">Panoramic city views, craft cocktails, and sophisticated ambiance. Perfect for pre-party gatherings and intimate celebrations.</p>
+              <span className="inline-flex items-center gap-2 text-primary-foreground font-bold text-sm uppercase">
+                Explore <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </AnimatedElement>
+
+          {/* Card 3: Nightclubs */}
+          <AnimatedElement delay={200}>
+            <div className="group cursor-pointer">
+              <div className="relative overflow-hidden rounded-lg mb-6 h-[300px]">
+                <Image 
+                  src="https://static.wixstatic.com/media/b57044_c0c57d7c79724a259d4adf22606a8f7f~mv2.png?originWidth=576&originHeight=896"
+                  alt="Nightclubs"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  width={400}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+              <h3 className="font-paragraph text-2xl uppercase text-secondary-foreground mb-3 group-hover:text-primary-foreground transition-colors">Nightclubs</h3>
+              <p className="text-secondary-foreground/70 mb-4">High-energy dance floors, cutting-edge sound systems, and unforgettable nights. Dance until dawn with your crew.</p>
+              <span className="inline-flex items-center gap-2 text-primary-foreground font-bold text-sm uppercase">
+                Explore <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </AnimatedElement>
+        </div>
       </section>
 
       {/* --- RHYTHM SECTION (Intensity vs Chill) --- */}

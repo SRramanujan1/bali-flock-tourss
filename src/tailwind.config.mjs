@@ -23,17 +23,17 @@ export default {
                 paragraph: "system-ui, -apple-system, sans-serif"
             },
             colors: {
-                buttonborder: '#FF5722',
-                linktext: '#FF5722',
-                cardbackground: '#FFF8F5',
+                buttonborder: '#E1306C',
+                linktext: '#E1306C',
+                cardbackground: '#FAFAFA',
                 foreground: '#FFFFFF',
                 destructive: '#FF3366',
                 destructiveforeground: '#ffffff',
-                background: '#0A0E27',
-                secondary: '#FFF8F5',
-                'secondary-foreground': '#0A0E27',
-                'primary-foreground': '#FF5722',
-                primary: '#0A0E27'
+                background: '#FFFFFF',
+                secondary: '#F8F9FA',
+                'secondary-foreground': '#262626',
+                'primary-foreground': '#E1306C',
+                primary: '#FFFFFF'
             },
         },
     },
