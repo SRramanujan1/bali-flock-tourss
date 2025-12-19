@@ -4,6 +4,29 @@
  */
 
 /**
+ * Collection ID: activities
+ * Interface for Activities
+ */
+export interface Activities {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  name?: string;
+  /** @wixFieldType text */
+  description?: string;
+  /** @wixFieldType number */
+  pricePerPerson?: number;
+  /** @wixFieldType text */
+  category?: string;
+  /** @wixFieldType image */
+  activityImage?: string;
+  /** @wixFieldType text */
+  location?: string;
+}
+
+
+/**
  * Collection ID: holidaypackages
  * Interface for HolidayPackages
  */

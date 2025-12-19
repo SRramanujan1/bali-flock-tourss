@@ -5,6 +5,7 @@ import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import HomePage from '@/components/pages/HomePage';
 import PackagesPage from '@/components/pages/PackagesPage';
 import PackageDetailPage from '@/components/pages/PackageDetailPage';
+import PackageCustomizerPage from '@/components/pages/PackageCustomizerPage';
 import DestinationPage from '@/components/pages/DestinationPage';
 
 // Layout component that includes ScrollToTop
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "packages/:id",
         element: <PackageDetailPage />,
+      },
+      {
+        path: "packages/:id/customize",
+        element: <PackageCustomizerPage />,
       },
       {
         path: "destination",

@@ -226,9 +226,12 @@ export default function PackageDetailPage() {
 
               {/* CTA Buttons */}
               <div className="space-y-3">
-                <button className="w-full bg-white text-primary hover:bg-gray-100 font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105">
-                  Book Now
-                </button>
+                <Link
+                  to={`/packages/${id}/customize`}
+                  className="block w-full bg-white text-primary hover:bg-gray-100 font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 text-center"
+                >
+                  Customize Package
+                </Link>
                 <button className="w-full border-2 border-white text-white hover:bg-white/10 font-bold py-3 rounded-lg transition-all duration-200">
                   Request Info
                 </button>
