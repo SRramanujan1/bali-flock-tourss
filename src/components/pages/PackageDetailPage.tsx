@@ -1,43 +1,43 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Clock, Users, MapPin, DollarSign, CheckCircle } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
-import { ArrowLeft, Clock, DollarSign, Users, Sparkles } from 'lucide-react';
 
 export default function PackageDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [packageData, setPackageData] = useState<HolidayPackages | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [pkg, setPkg] = useState<HolidayPackages | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPackage = async () => {
       if (!id) return;
-      
       try {
-        const data = await BaseCrudService.getById<HolidayPackages>('holidaypackages', id);
-        setPackageData(data);
+        const item = await BaseCrudService.getById<HolidayPackages>('holidaypackages', id);
+        setPkg(item);
       } catch (error) {
         console.error('Error fetching package:', error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
     fetchPackage();
   }, [id]);
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-primary">
+      <div className="min-h-screen bg-white">
         <Header />
-        <div className="max-w-[120rem] mx-auto px-6 py-32">
+        <div className="max-w-[100rem] mx-auto px-6 py-20">
           <div className="animate-pulse space-y-8">
-            <div className="h-12 bg-secondary/20 w-2/3" />
-            <div className="h-96 bg-secondary/20" />
-            <div className="h-32 bg-secondary/20" />
+            <div className="h-96 bg-cardbackground rounded-xl"></div>
+            <div className="h-12 bg-cardbackground rounded-lg w-1/2"></div>
+            <div className="h-24 bg-cardbackground rounded-lg"></div>
           </div>
         </div>
         <Footer />
@@ -45,19 +45,13 @@ export default function PackageDetailPage() {
     );
   }
 
-  if (!packageData) {
+  if (!pkg) {
     return (
-      <div className="min-h-screen bg-primary">
+      <div className="min-h-screen bg-white">
         <Header />
-        <div className="max-w-[120rem] mx-auto px-6 py-32 text-center">
-          <h1 className="font-paragraph text-4xl uppercase text-primary-foreground mb-6">
-            Package Not Found
-          </h1>
-          <Link 
-            to="/packages"
-            className="inline-flex items-center gap-2 font-paragraph text-lg uppercase text-linktext hover:opacity-80 transition-opacity"
-          >
-            <ArrowLeft className="w-5 h-5" />
+        <div className="max-w-[100rem] mx-auto px-6 py-20 text-center">
+          <h1 className="text-3xl font-bold text-foreground mb-4">Package not found</h1>
+          <Link to="/packages" className="text-primary hover:text-primary-dark font-semibold">
             Back to Packages
           </Link>
         </div>
@@ -66,174 +60,208 @@ export default function PackageDetailPage() {
     );
   }
 
+  const itineraryItems = pkg.itinerary
+    ? pkg.itinerary.split('\n').filter((item) => item.trim())
+    : [];
+
+  const inclusionItems = pkg.inclusions
+    ? pkg.inclusions.split('\n').filter((item) => item.trim())
+    : [];
+
   return (
-    <div className="min-h-screen bg-primary">
+    <div className="min-h-screen bg-white">
       <Header />
-      
-      {/* Back Link */}
-      <div className="max-w-[120rem] mx-auto px-6 pt-32 pb-8">
-        <Link 
+
+      {/* Back Button */}
+      <div className="max-w-[100rem] mx-auto px-6 pt-8">
+        <Link
           to="/packages"
-          className="inline-flex items-center gap-2 font-paragraph text-base uppercase text-foreground hover:text-primary-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-semibold transition-colors"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft size={20} />
           Back to Packages
         </Link>
       </div>
 
       {/* Hero Image */}
-      <section className="max-w-[120rem] mx-auto px-6 pb-16">
-        <div className="aspect-[21/9] overflow-hidden">
-          <Image 
-            src={packageData.mainImage || 'https://static.wixstatic.com/media/b57044_e855be5756b24f2b8af04b47b857f9cd~mv2.png?originWidth=1600&originHeight=640'}
-            alt={packageData.packageName || 'Holiday package'}
-            className="w-full h-full object-cover"
-            width={1600}
-          />
-        </div>
-      </section>
-
-      {/* Package Header */}
-      <section className="max-w-[120rem] mx-auto px-6 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-2">
-            <div className="flex gap-3 mb-6">
-              {packageData.groupType && (
-                <span className="font-paragraph text-sm uppercase px-4 py-2 bg-linktext/10 text-linktext">
-                  {packageData.groupType}
-                </span>
-              )}
-              {packageData.holidayStyle && (
-                <span className="font-paragraph text-sm uppercase px-4 py-2 bg-linktext/10 text-linktext">
-                  {packageData.holidayStyle}
-                </span>
-              )}
-            </div>
-            
-            <h1 className="font-paragraph text-5xl md:text-7xl uppercase text-primary-foreground mb-6">
-              {packageData.packageName}
+      <section className="max-w-[100rem] mx-auto px-6 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="relative h-96 md:h-[500px] rounded-xl overflow-hidden shadow-2xl"
+        >
+          {pkg.mainImage && (
+            <Image
+              src={pkg.mainImage}
+              alt={pkg.packageName || 'Package'}
+              className="w-full h-full object-cover"
+              width={1200}
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          <div className="absolute bottom-6 left-6 right-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+              {pkg.packageName}
             </h1>
-            
-            <p className="font-paragraph text-lg text-foreground leading-relaxed">
-              {packageData.description}
-            </p>
+            {pkg.holidayStyle && (
+              <span className="inline-block bg-secondary text-white px-4 py-2 rounded-full font-semibold">
+                {pkg.holidayStyle}
+              </span>
+            )}
           </div>
+        </motion.div>
+      </section>
 
-          <div className="bg-secondary p-8">
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <DollarSign className="w-6 h-6 text-linktext flex-shrink-0 mt-1" />
-                <div>
-                  <p className="font-paragraph text-sm uppercase text-secondary-foreground/70 mb-1">
-                    Price
-                  </p>
-                  <p className="font-paragraph text-3xl text-secondary-foreground">
-                    ${packageData.price}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <Clock className="w-6 h-6 text-linktext flex-shrink-0 mt-1" />
-                <div>
-                  <p className="font-paragraph text-sm uppercase text-secondary-foreground/70 mb-1">
-                    Duration
-                  </p>
-                  <p className="font-paragraph text-xl text-secondary-foreground">
-                    {packageData.duration}
-                  </p>
-                </div>
-              </div>
-
-              {packageData.groupType && (
-                <div className="flex items-start gap-4">
-                  <Users className="w-6 h-6 text-linktext flex-shrink-0 mt-1" />
-                  <div>
-                    <p className="font-paragraph text-sm uppercase text-secondary-foreground/70 mb-1">
-                      Group Type
-                    </p>
-                    <p className="font-paragraph text-xl text-secondary-foreground">
-                      {packageData.groupType}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {packageData.holidayStyle && (
-                <div className="flex items-start gap-4">
-                  <Sparkles className="w-6 h-6 text-linktext flex-shrink-0 mt-1" />
-                  <div>
-                    <p className="font-paragraph text-sm uppercase text-secondary-foreground/70 mb-1">
-                      Holiday Style
-                    </p>
-                    <p className="font-paragraph text-xl text-secondary-foreground">
-                      {packageData.holidayStyle}
-                    </p>
-                  </div>
-                </div>
-              )}
+      {/* Package Info */}
+      <section className="max-w-[100rem] mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Main Content */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-2 space-y-12"
+          >
+            {/* Description */}
+            <div>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Overview</h2>
+              <p className="text-lg text-muted leading-relaxed">
+                {pkg.description}
+              </p>
             </div>
 
-            <button className="w-full mt-8 font-heading text-xl text-primary-foreground border-2 border-buttonborder px-8 py-4 hover:bg-primary-foreground hover:text-primary transition-all">
-              Book Now
-            </button>
-          </div>
+            {/* Itinerary */}
+            {itineraryItems.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-bold text-foreground mb-6">Itinerary</h2>
+                <div className="space-y-4">
+                  {itineraryItems.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex gap-4 p-4 bg-cardbackground rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
+                        {index + 1}
+                      </div>
+                      <p className="text-foreground pt-1">{item}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Inclusions */}
+            {inclusionItems.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-bold text-foreground mb-6">What's Included</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {inclusionItems.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex items-start gap-3 p-4 bg-success/10 rounded-lg"
+                    >
+                      <CheckCircle size={20} className="text-success flex-shrink-0 mt-1" />
+                      <span className="text-foreground">{item}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Sidebar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="lg:col-span-1"
+          >
+            <div className="sticky top-24 bg-gradient-to-br from-primary to-secondary rounded-xl p-8 text-white shadow-2xl">
+              {/* Price */}
+              <div className="mb-8">
+                <p className="text-white/80 text-sm mb-2">Starting from</p>
+                <p className="text-5xl font-bold">${pkg.price}</p>
+                <p className="text-white/80 text-sm mt-2">per person</p>
+              </div>
+
+              {/* Details */}
+              <div className="space-y-4 mb-8 pb-8 border-b border-white/20">
+                {pkg.duration && (
+                  <div className="flex items-center gap-3">
+                    <Clock size={20} />
+                    <div>
+                      <p className="text-white/80 text-sm">Duration</p>
+                      <p className="font-semibold">{pkg.duration}</p>
+                    </div>
+                  </div>
+                )}
+                {pkg.groupType && (
+                  <div className="flex items-center gap-3">
+                    <Users size={20} />
+                    <div>
+                      <p className="text-white/80 text-sm">Group Type</p>
+                      <p className="font-semibold">{pkg.groupType}</p>
+                    </div>
+                  </div>
+                )}
+                {pkg.holidayStyle && (
+                  <div className="flex items-center gap-3">
+                    <MapPin size={20} />
+                    <div>
+                      <p className="text-white/80 text-sm">Style</p>
+                      <p className="font-semibold">{pkg.holidayStyle}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="space-y-3">
+                <button className="w-full bg-white text-primary hover:bg-gray-100 font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105">
+                  Book Now
+                </button>
+                <button className="w-full border-2 border-white text-white hover:bg-white/10 font-bold py-3 rounded-lg transition-all duration-200">
+                  Request Info
+                </button>
+              </div>
+
+              {/* Trust Badge */}
+              <div className="mt-8 pt-8 border-t border-white/20 text-center">
+                <p className="text-white/80 text-sm">✓ Trusted by 10,000+ travelers</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Itinerary Section */}
-      {packageData.itinerary && (
-        <section className="max-w-[120rem] mx-auto px-6 py-16">
-          <div className="bg-secondary p-12">
-            <h2 className="font-paragraph text-4xl uppercase text-secondary-foreground mb-8">
-              Itinerary
+      {/* Related Packages CTA */}
+      <section className="bg-secondary/10 py-16">
+        <div className="max-w-[100rem] mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+              Explore More Packages
             </h2>
-            <div className="font-paragraph text-base text-secondary-foreground/80 whitespace-pre-line leading-relaxed">
-              {packageData.itinerary}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Inclusions Section */}
-      {packageData.inclusions && (
-        <section className="max-w-[120rem] mx-auto px-6 py-16">
-          <h2 className="font-paragraph text-4xl uppercase text-primary-foreground mb-8">
-            What's Included
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {packageData.inclusions.split('\n').filter(item => item.trim()).map((inclusion, index) => (
-              <div key={index} className="flex items-start gap-4 bg-secondary p-6">
-                <div className="w-2 h-2 bg-linktext rounded-full mt-2 flex-shrink-0" />
-                <p className="font-paragraph text-base text-secondary-foreground">
-                  {inclusion.trim()}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* CTA Section */}
-      <section className="max-w-[120rem] mx-auto px-6 py-24">
-        <div className="text-center bg-secondary p-16">
-          <h2 className="font-paragraph text-4xl md:text-5xl uppercase text-secondary-foreground mb-6">
-            Ready to Experience This?
-          </h2>
-          <p className="font-paragraph text-lg text-secondary-foreground/70 mb-8 max-w-2xl mx-auto">
-            Get in touch with us to customize this package or book your adventure today
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="font-heading text-xl text-primary-foreground border-2 border-buttonborder px-10 py-4 hover:bg-primary-foreground hover:text-primary transition-all">
-              Contact Us
-            </button>
-            <Link 
+            <Link
               to="/packages"
-              className="font-paragraph text-lg uppercase text-linktext border-2 border-linktext px-10 py-4 hover:bg-linktext hover:text-white transition-all inline-flex items-center justify-center"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold px-8 py-4 rounded-lg transition-all duration-200 transform hover:scale-105"
             >
-              View More Packages
+              View All Packages
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
