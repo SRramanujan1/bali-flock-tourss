@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Clock, Users, Star } from 'lucide-react';
+import { ArrowRight, MapPin, Clock, Users, Zap, Music, Flame } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
@@ -48,47 +48,101 @@ export default function HomePage() {
   } as const;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950">
       <Header />
 
-      {/* Hero Section */}
-      <section className="w-full py-24 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
-        {/* Background Image */}
+      {/* Hero Section with Video Background */}
+      <section className="w-full py-24 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[800px] flex items-center justify-center">
+        {/* Video Background Container */}
         <div className="absolute inset-0 z-0">
+          {/* Fallback Image if video not available */}
           <Image
             src="https://static.wixstatic.com/media/b57044_7b3d87706cbb49529e5b4264a4c47ca3~mv2.png?id=fins-beach-club-dusk-people"
-            alt="Fins Beach Club prominently illuminated at dusk with people enjoying the beach, bean bag chair and coconut drink in foreground, afternoon transitioning to night"
+            alt="Fins Beach Club party vibes with people enjoying the beach"
             className="w-full h-full object-cover"
             width={1600}
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
+          
+          {/* Animated Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-purple-900/50 to-black/70"></div>
+          
+          {/* Animated Glow Effects */}
+          <motion.div
+            className="absolute top-0 left-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"
+            animate={{ 
+              y: [0, 30, 0],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl"
+            animate={{ 
+              y: [0, -30, 0],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+          />
         </div>
 
-        <div className="max-w-[100rem] mx-auto px-6 relative z-10 w-full">
+        <div className="max-w-[100rem] mx-auto px-6 relative z-10 w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Discover Bali's Magic
+            {/* Badge */}
+            <motion.div
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/50 rounded-full px-6 py-2 mb-6"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Zap size={16} className="text-pink-400" />
+              <span className="text-pink-300 font-bold text-sm">PARTY VIBES ACTIVATED</span>
+            </motion.div>
+
+            <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6 leading-tight drop-shadow-lg">
+              Experience Bali's Ultimate Party Scene
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
-              Unforgettable adventures await. Explore pristine beaches, ancient temples, and vibrant culture with Bali Flock Tours.
+            <p className="text-xl md:text-2xl text-purple-200/90 mb-8 max-w-3xl mx-auto font-semibold">
+              Epic beach clubs, unforgettable nights, and memories that last forever. Join the ultimate Bali party experience.
             </p>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/packages"
-                className="bg-white text-primary hover:bg-gray-100 font-bold px-8 py-4 rounded-lg transition-all duration-200 transform hover:scale-105 inline-flex items-center justify-center gap-2"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Explore Packages <ArrowRight size={20} />
-              </Link>
-              <button className="border-2 border-white text-white hover:bg-white/10 font-bold px-8 py-4 rounded-lg transition-all duration-200">
+                <Link
+                  to="/packages"
+                  className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black px-10 py-4 rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2 shadow-lg shadow-purple-500/50"
+                >
+                  Explore Packages <ArrowRight size={20} />
+                </Link>
+              </motion.div>
+              <motion.button 
+                className="border-2 border-cyan-400 text-cyan-300 hover:bg-cyan-400/10 font-bold px-10 py-4 rounded-full transition-all duration-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 Learn More
-              </button>
+              </motion.button>
             </div>
+          </motion.div>
+
+          {/* Floating Party Icons */}
+          <motion.div
+            className="absolute top-20 left-10 text-pink-400"
+            animate={{ y: [0, 20, 0], rotate: [0, 10, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <Music size={32} />
+          </motion.div>
+          <motion.div
+            className="absolute top-32 right-10 text-cyan-400"
+            animate={{ y: [0, -20, 0], rotate: [0, -10, 0] }}
+            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+          >
+            <Flame size={32} />
           </motion.div>
         </div>
       </section>
@@ -102,18 +156,18 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Featured Packages
+          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
+            Featured Party Packages
           </h2>
-          <p className="text-lg text-muted max-w-2xl mx-auto">
-            Handpicked experiences designed to create lasting memories
+          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
+            Handpicked experiences designed to create unforgettable party memories
           </p>
         </motion.div>
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-cardbackground rounded-xl h-96 animate-pulse"></div>
+              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-96 animate-pulse border border-purple-500/30"></div>
             ))}
           </div>
         ) : (
@@ -128,9 +182,9 @@ export default function HomePage() {
               <motion.div
                 key={pkg._id}
                 variants={itemVariants}
-                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                className="group bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-4 backdrop-blur-sm"
               >
-                <div className="relative h-64 overflow-hidden bg-gray-200">
+                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-purple-900 to-slate-900">
                   {pkg.mainImage && (
                     <Image
                       src={pkg.mainImage}
@@ -139,37 +193,41 @@ export default function HomePage() {
                       width={400}
                     />
                   )}
-                  <div className="absolute top-4 right-4 bg-primary text-white px-4 py-2 rounded-full font-bold">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <motion.div 
+                    className="absolute top-4 right-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full font-black shadow-lg shadow-purple-500/50"
+                    whileHover={{ scale: 1.1 }}
+                  >
                     ${pkg.price}
-                  </div>
+                  </motion.div>
                 </div>
 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-foreground mb-2">
+                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-2">
                     {pkg.packageName}
                   </h3>
-                  <p className="text-muted text-sm mb-4 line-clamp-2">
+                  <p className="text-purple-200/70 text-sm mb-4 line-clamp-2 font-medium">
                     {pkg.description}
                   </p>
 
                   <div className="space-y-2 mb-6">
                     {pkg.duration && (
-                      <div className="flex items-center gap-2 text-sm text-muted">
-                        <Clock size={16} className="text-secondary" />
-                        <span>{pkg.duration}</span>
+                      <div className="flex items-center gap-2 text-sm text-purple-200/60">
+                        <Clock size={16} className="text-cyan-400" />
+                        <span className="font-medium">{pkg.duration}</span>
                       </div>
                     )}
                     {pkg.groupType && (
-                      <div className="flex items-center gap-2 text-sm text-muted">
-                        <Users size={16} className="text-secondary" />
-                        <span>{pkg.groupType}</span>
+                      <div className="flex items-center gap-2 text-sm text-purple-200/60">
+                        <Users size={16} className="text-pink-400" />
+                        <span className="font-medium">{pkg.groupType}</span>
                       </div>
                     )}
                   </div>
 
                   <Link
                     to={`/packages/${pkg._id}`}
-                    className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 inline-block text-center"
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black py-3 rounded-lg transition-all duration-200 transform hover:scale-105 inline-block text-center shadow-lg shadow-purple-500/50"
                   >
                     View Details
                   </Link>
@@ -196,8 +254,9 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="bg-secondary/10 py-20">
-        <div className="max-w-[100rem] mx-auto px-6">
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/30 to-transparent"></div>
+        <div className="max-w-[100rem] mx-auto px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -205,11 +264,11 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
               Why Choose Bali Flock
             </h2>
-            <p className="text-lg text-muted max-w-2xl mx-auto">
-              We're committed to creating unforgettable experiences
+            <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
+              We're committed to creating unforgettable party experiences
             </p>
           </motion.div>
 
@@ -222,24 +281,24 @@ export default function HomePage() {
           >
             {[
               {
-                icon: MapPin,
-                title: 'Expert Guides',
-                description: 'Local experts who know Bali inside and out',
+                icon: Flame,
+                title: 'Epic Venues',
+                description: 'Access to the hottest beach clubs and party spots',
               },
               {
-                icon: Star,
-                title: 'Premium Quality',
-                description: 'Handpicked accommodations and experiences',
+                icon: Music,
+                title: 'VIP Experience',
+                description: 'Premium tables, exclusive events, and special access',
               },
               {
                 icon: Users,
-                title: 'Small Groups',
-                description: 'Intimate group sizes for personalized attention',
+                title: 'Party Crew',
+                description: 'Meet fellow travelers and make lifelong friends',
               },
               {
-                icon: Clock,
+                icon: Zap,
                 title: '24/7 Support',
-                description: 'Round-the-clock customer support',
+                description: 'Round-the-clock party coordination and assistance',
               },
             ].map((feature, index) => {
               const Icon = feature.icon;
@@ -247,15 +306,19 @@ export default function HomePage() {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-center"
+                  className="bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:shadow-purple-500/50 transition-all duration-300 text-center backdrop-blur-sm group"
+                  whileHover={{ y: -10 }}
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <motion.div 
+                    className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-500/50 group-hover:shadow-pink-500/50"
+                    whileHover={{ rotate: 10, scale: 1.1 }}
+                  >
                     <Icon size={32} className="text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">
+                  </motion.div>
+                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-muted">{feature.description}</p>
+                  <p className="text-purple-200/70 font-medium">{feature.description}</p>
                 </motion.div>
               );
             })}
@@ -264,23 +327,45 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-primary to-secondary py-16">
-        <div className="max-w-[100rem] mx-auto px-6 text-center">
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-cyan-600/20"></div>
+        <motion.div
+          className="absolute top-0 left-1/3 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl"
+          animate={{ 
+            y: [0, 50, 0],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{ duration: 6, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-1/3 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl"
+          animate={{ 
+            y: [0, -50, 0],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{ duration: 7, repeat: Infinity, delay: 1 }}
+        />
+        
+        <div className="max-w-[100rem] mx-auto px-6 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Ready for Your Bali Adventure?
+            <h2 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6">
+              Ready for the Ultimate Party?
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Book your dream vacation today and create memories that last a lifetime.
+            <p className="text-xl text-purple-200/90 mb-8 max-w-2xl mx-auto font-semibold">
+              Book your Bali party experience today and create memories that last a lifetime.
             </p>
-            <button className="bg-white text-primary hover:bg-gray-100 font-bold px-10 py-4 rounded-lg transition-all duration-200 transform hover:scale-105 inline-flex items-center gap-2">
+            <motion.button 
+              className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black px-12 py-4 rounded-full transition-all duration-200 inline-flex items-center gap-2 shadow-lg shadow-purple-500/50"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               Start Booking <ArrowRight size={20} />
-            </button>
+            </motion.button>
           </motion.div>
         </div>
       </section>
