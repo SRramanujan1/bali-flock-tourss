@@ -18,7 +18,7 @@ export default function Header() {
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ type: 'spring', stiffness: 400 }}
           >
-            <span className="text-white font-black text-lg">B<span>F🔒</span></span>
+            <span className="text-white font-black text-lg">F 🔒</span>
           </motion.div>
           <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 hidden sm:inline">Bali Flock</span>
         </Link>
