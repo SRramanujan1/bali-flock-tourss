@@ -91,14 +91,7 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Badge */}
-            <motion.div
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/50 rounded-full px-6 py-2 mb-6"
-              whileHover={{ scale: 1.05 }}
-            >
-              <Zap size={16} className="text-pink-400" />
-              <span className="text-pink-300 font-bold text-sm">PARTY VIBES ACTIVATED</span>
-            </motion.div>
+
 
             <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6 leading-tight drop-shadow-lg">
               Experience Bali's Ultimate Party Scene
