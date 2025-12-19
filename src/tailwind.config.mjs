@@ -19,21 +19,21 @@ export default {
                 '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.07em', fontWeight: '900' }],
             },
             fontFamily: {
-                heading: "pinyon-script",
-                paragraph: "madefor-display"
+                heading: "system-ui, -apple-system, sans-serif",
+                paragraph: "system-ui, -apple-system, sans-serif"
             },
             colors: {
-                buttonborder: '#FF6B35',
-                linktext: '#FF6B35',
-                cardbackground: '#FFF5F0',
+                buttonborder: '#FF5722',
+                linktext: '#FF5722',
+                cardbackground: '#FFF8F5',
                 foreground: '#FFFFFF',
                 destructive: '#FF3366',
                 destructiveforeground: '#ffffff',
-                background: '#0F0F1E',
-                secondary: '#FFF5F0',
-                'secondary-foreground': '#0F0F1E',
-                'primary-foreground': '#FF6B35',
-                primary: '#0F0F1E'
+                background: '#0A0E27',
+                secondary: '#FFF8F5',
+                'secondary-foreground': '#0A0E27',
+                'primary-foreground': '#FF5722',
+                primary: '#0A0E27'
             },
         },
     },
