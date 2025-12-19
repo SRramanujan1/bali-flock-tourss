@@ -19,8 +19,10 @@ export default {
                 '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.07em', fontWeight: '900' }],
             },
             fontFamily: {
-                heading: "system-ui, -apple-system, sans-serif",
-                paragraph: "system-ui, -apple-system, sans-serif"
+                heading: ["system-ui", "-apple-system", "sans-serif"],
+                paragraph: ["system-ui", "-apple-system", "sans-serif"],
+                roboto: ["roboto", "sans-serif"],
+                montserrat: ["montserrat", "sans-serif"]
             },
             colors: {
                 buttonborder: '#E1306C',
