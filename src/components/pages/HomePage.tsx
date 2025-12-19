@@ -56,8 +56,8 @@ export default function HomePage() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://static.wixstatic.com/media/b57044_c3add742f1b3455c8dd655e3370559e4~mv2.png?id=beach-bean-bag-bintang"
-            alt="Relaxing beach scene with bean bag and Bintang beer at Fins nightclub"
+            src="https://static.wixstatic.com/media/b57044_9e7dab94a041431199807ea4e3d32742~mv2.png?id=beach-bean-bag-coconut"
+            alt="Relaxing tropical beach scene with bean bag chair and coconut drink with straw"
             className="w-full h-full object-cover"
             width={1600}
           />
