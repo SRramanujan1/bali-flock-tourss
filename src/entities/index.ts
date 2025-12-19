@@ -27,6 +27,39 @@ export interface Activities {
 
 
 /**
+ * Collection ID: bookings
+ * Interface for Bookings
+ */
+export interface Bookings {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  bookingReference?: string;
+  /** @wixFieldType datetime */
+  bookingDate?: Date | string;
+  /** @wixFieldType text */
+  travelerEmail?: string;
+  /** @wixFieldType text */
+  packageDisplayName?: string;
+  /** @wixFieldType number */
+  totalAmount?: number;
+  /** @wixFieldType text */
+  currency?: string;
+  /** @wixFieldType text */
+  paymentStatus?: string;
+  /** @wixFieldType text */
+  bookingStatus?: string;
+  /** @wixFieldType text */
+  specialRequests?: string;
+  /** @wixFieldType text */
+  dietaryRestrictions?: string;
+  // Customization details stored as JSON string
+  customizationDetails?: string;
+}
+
+
+/**
  * Collection ID: holidaypackages
  * Interface for HolidayPackages
  */
@@ -52,4 +85,54 @@ export interface HolidayPackages {
   itinerary?: string;
   /** @wixFieldType text */
   inclusions?: string;
+}
+
+/**
+ * Collection ID: quotes
+ * Interface for Custom Package Quotes
+ */
+export interface Quotes {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  packageId?: string;
+  /** @wixFieldType text */
+  packageName?: string;
+  /** @wixFieldType text */
+  userEmail?: string;
+  /** @wixFieldType text */
+  dietaryRestrictions?: string;
+  /** @wixFieldType text */
+  specialRequests?: string;
+  /** @wixFieldType datetime */
+  expirationDate?: Date;
+  /** @wixFieldType text */
+  quoteStatus?: string;
+  // Customization details stored as JSON string
+  customizationDetails?: string;
+}
+
+/**
+ * Collection ID: quotes
+ * Interface for CustomPackageQuotes
+ */
+export interface CustomPackageQuotes {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  packageId?: string;
+  /** @wixFieldType text */
+  packageName?: string;
+  /** @wixFieldType text */
+  userEmail?: string;
+  /** @wixFieldType text */
+  dietaryRestrictions?: string;
+  /** @wixFieldType text */
+  specialRequests?: string;
+  /** @wixFieldType datetime */
+  expirationDate?: Date | string;
+  /** @wixFieldType text */
+  quoteStatus?: string;
 }

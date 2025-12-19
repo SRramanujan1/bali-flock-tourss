@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, Download, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Mail, Download, CheckCircle2, AlertCircle, Save } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
-import { HolidayPackages, Activities } from '@/entities';
+import { useMember } from '@/integrations';
+import { HolidayPackages, Activities, Quotes } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
@@ -18,6 +19,8 @@ interface CustomizationState {
   accommodation: string;
   flights: string;
   selectedActivities: string[];
+  dietaryRestrictions: string;
+  specialRequests: string;
 }
 
 const ACTIVITY_CATEGORIES = ['outdoors', 'watersport', 'indoors', 'nightlife', 'explore'];
@@ -25,6 +28,8 @@ const ACTIVITY_CATEGORIES = ['outdoors', 'watersport', 'indoors', 'nightlife', '
 export default function PackageCustomizerPage() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { member, isAuthenticated } = useMember();
   
   const [pkg, setPkg] = useState<HolidayPackages | null>(null);
   const [activities, setActivities] = useState<Activities[]>([]);
@@ -35,11 +40,15 @@ export default function PackageCustomizerPage() {
     accommodation: searchParams.get('accommodation') || '',
     flights: searchParams.get('flights') || '',
     selectedActivities: [],
+    dietaryRestrictions: '',
+    specialRequests: '',
   });
   
   const [showQuote, setShowQuote] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailInput, setEmailInput] = useState('');
+  const [quoteSaved, setQuoteSaved] = useState(false);
+  const [savingQuote, setSavingQuote] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,7 +105,7 @@ export default function PackageCustomizerPage() {
 
   const generateQuoteText = () => {
     const itinerary = generateItinerary();
-    return `CUSTOM HOLIDAY PACKAGE QUOTE
+    let quoteText = `CUSTOM HOLIDAY PACKAGE QUOTE
 =====================================
 
 Package: ${pkg?.packageName}
@@ -115,9 +124,55 @@ ACTIVITIES SUBTOTAL: $${activitiesPrice.toFixed(2)}
 TOTAL QUOTE: $${totalPrice.toFixed(2)}
 
 CUSTOM ITINERARY:
-${itinerary}
+${itinerary}`;
 
-Generated on: ${new Date().toLocaleDateString()}`;
+    // Add fine print with dietary restrictions and special requests
+    if (customization.dietaryRestrictions || customization.specialRequests) {
+      quoteText += '\n\nFINE PRINT:';
+      if (customization.dietaryRestrictions) {
+        quoteText += `\nDietary Restrictions: ${customization.dietaryRestrictions}`;
+      }
+      if (customization.specialRequests) {
+        quoteText += `\nSpecial Requests: ${customization.specialRequests}`;
+      }
+    }
+
+    quoteText += `\n\nGenerated on: ${new Date().toLocaleDateString()}`;
+    return quoteText;
+  };
+
+  const handleSaveQuote = async () => {
+    if (!isAuthenticated || !member?.loginEmail) {
+      alert('Please sign in to save quotes');
+      return;
+    }
+
+    setSavingQuote(true);
+    try {
+      const expirationDate = new Date();
+      expirationDate.setMonth(expirationDate.getMonth() + 2);
+
+      const quote: Quotes = {
+        _id: crypto.randomUUID(),
+        packageId: id || '',
+        packageName: pkg?.packageName || '',
+        userEmail: member.loginEmail,
+        dietaryRestrictions: customization.dietaryRestrictions,
+        specialRequests: customization.specialRequests,
+        expirationDate,
+        quoteStatus: 'active',
+        customizationDetails: JSON.stringify(customization),
+      };
+
+      await BaseCrudService.create('quotes', quote);
+      setQuoteSaved(true);
+      setTimeout(() => setQuoteSaved(false), 3000);
+    } catch (error) {
+      console.error('Error saving quote:', error);
+      alert('Failed to save quote. Please try again.');
+    } finally {
+      setSavingQuote(false);
+    }
   };
 
   const handleSendEmail = async () => {
@@ -128,7 +183,7 @@ Generated on: ${new Date().toLocaleDateString()}`;
 
     try {
       const quoteText = generateQuoteText();
-      // In a real implementation, this would call a backend API to send email
+      // In a real implementation, this would call a backend API to send email with PDF
       // For now, we'll just show a success message
       console.log('Sending quote to:', emailInput);
       console.log('Quote content:', quoteText);
@@ -307,6 +362,45 @@ Generated on: ${new Date().toLocaleDateString()}`;
               </div>
             </div>
 
+            {/* Dietary Restrictions & Special Requests */}
+            <div className="bg-cardbackground rounded-xl p-8">
+              <h2 className="text-2xl font-bold text-foreground mb-6">Additional Information</h2>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-foreground mb-2">
+                    Dietary Restrictions
+                  </label>
+                  <Textarea
+                    placeholder="e.g., Vegetarian, Gluten-free, Nut allergies..."
+                    value={customization.dietaryRestrictions}
+                    onChange={(e) =>
+                      setCustomization((prev) => ({
+                        ...prev,
+                        dietaryRestrictions: e.target.value,
+                      }))
+                    }
+                    className="w-full min-h-24"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-foreground mb-2">
+                    Special Requests
+                  </label>
+                  <Textarea
+                    placeholder="e.g., Honeymoon suite, Early check-in, Photography services..."
+                    value={customization.specialRequests}
+                    onChange={(e) =>
+                      setCustomization((prev) => ({
+                        ...prev,
+                        specialRequests: e.target.value,
+                      }))
+                    }
+                    className="w-full min-h-24"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Activities Selection */}
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-foreground">Select Activities</h2>
@@ -436,6 +530,30 @@ Generated on: ${new Date().toLocaleDateString()}`;
                   Download Quote
                 </Button>
               </div>
+
+              {/* Save Quote Section */}
+              {isAuthenticated && (
+                <div className="space-y-3 pt-6 border-t border-white/20">
+                  <Button
+                    onClick={handleSaveQuote}
+                    disabled={savingQuote}
+                    className="w-full bg-white text-primary hover:bg-gray-100 font-bold py-3"
+                  >
+                    <Save size={18} className="mr-2" />
+                    {savingQuote ? 'Saving...' : 'Save Quote'}
+                  </Button>
+                  {quoteSaved && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2 text-success bg-white/20 p-3 rounded-lg text-sm"
+                    >
+                      <CheckCircle2 size={16} />
+                      Quote saved! Valid for 2 months
+                    </motion.div>
+                  )}
+                </div>
+              )}
 
               {/* Email Section */}
               <div className="space-y-3 pt-6 border-t border-white/20">
