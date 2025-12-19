@@ -7,6 +7,15 @@ import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
+import ImageSlideshow from '@/components/ImageSlideshow';
+
+// Slideshow images for stag party packages
+const STAG_SLIDESHOW_IMAGES = [
+  'https://static.wixstatic.com/media/b57044_f2d5f7efe01b4828a8e5434d7e56870d~mv2.png?id=beach-club-party',
+  'https://static.wixstatic.com/media/b57044_482443b572874c0587de531d0cd6cdce~mv2.png?id=paintball-adventure',
+  'https://static.wixstatic.com/media/b57044_5c1e1b96a96244dfa02e1fd79af17dc2~mv2.png?id=white-water-rafting',
+  'https://static.wixstatic.com/media/b57044_ca5963dfd2444835bfb805f9846dcc44~mv2.png?id=bucks-celebration',
+];
 
 export default function PackagesPage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
@@ -172,20 +181,36 @@ export default function PackagesPage() {
             animate="visible"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {filteredPackages.map((pkg) => (
+            {filteredPackages.map((pkg) => {
+              // Check if this is a stag party package
+              const isStagPackage = pkg.packageName?.toLowerCase().includes('stag') || 
+                                   pkg.packageName?.toLowerCase().includes('bucks');
+              const imagesToDisplay = isStagPackage && pkg.mainImage 
+                ? [pkg.mainImage, ...STAG_SLIDESHOW_IMAGES]
+                : pkg.mainImage 
+                ? [pkg.mainImage]
+                : [];
+
+              return (
               <motion.div
                 key={pkg._id}
                 variants={itemVariants}
                 className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
               >
                 <div className="relative h-64 overflow-hidden bg-gray-200">
-                  {pkg.mainImage && (
-                    <Image
-                      src={pkg.mainImage}
+                  {imagesToDisplay.length > 0 ? (
+                    <ImageSlideshow
+                      images={imagesToDisplay}
                       alt={pkg.packageName || 'Package'}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       width={400}
+                      autoPlay={isStagPackage}
+                      autoPlayInterval={3000}
                     />
+                  ) : (
+                    <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                      <span className="text-gray-500">No image available</span>
+                    </div>
                   )}
                   <div className="absolute top-4 right-4 bg-primary text-white px-4 py-2 rounded-full font-bold flex items-center gap-1">
                     <DollarSign size={16} />
@@ -229,7 +254,8 @@ export default function PackagesPage() {
                   </Link>
                 </div>
               </motion.div>
-            ))}
+              );
+            })}
           </motion.div>
         )}
       </section>
