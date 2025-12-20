@@ -28,6 +28,8 @@ export const CURRENCY_RATES: Record<string, number> = {
   SGD: 1.35,
   JPY: 149.50,
   INR: 83.12,
+  NZD: 1.68,
+  IRD: 83.12,
 };
 
 export const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -39,6 +41,8 @@ export const CURRENCY_SYMBOLS: Record<string, string> = {
   SGD: 'S$',
   JPY: '¥',
   INR: '₹',
+  NZD: 'NZ$',
+  IRD: '₹',
 };
 
 export const convertPrice = (priceInUSD: number, targetCurrency: string): number => {
