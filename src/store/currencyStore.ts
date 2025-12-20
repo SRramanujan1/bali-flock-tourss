@@ -33,16 +33,16 @@ export const CURRENCY_RATES: Record<string, number> = {
 };
 
 export const CURRENCY_SYMBOLS: Record<string, string> = {
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  AUD: 'A$',
-  CAD: 'C$',
-  SGD: 'S$',
-  JPY: '¥',
-  INR: '₹',
-  NZD: 'NZ$',
-  IRD: '₹',
+  USD: '🇺🇸',
+  EUR: '🇪🇺',
+  GBP: '🇬🇧',
+  AUD: '🇦🇺',
+  CAD: '🇨🇦',
+  SGD: '🇸🇬',
+  JPY: '🇯🇵',
+  INR: '🇮🇳',
+  NZD: '🇳🇿',
+  IRD: '🇮🇪',
 };
 
 export const convertPrice = (priceInUSD: number, targetCurrency: string): number => {
