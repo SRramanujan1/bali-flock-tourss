@@ -32,7 +32,8 @@ export const CURRENCY_RATES: Record<string, number> = {
   IRD: 83.12,
 };
 
-export const CURRENCY_SYMBOLS: Record<string, string> = {
+// Flags for currency selector UI (modals, dropdowns)
+export const CURRENCY_FLAGS: Record<string, string> = {
   USD: '🇺🇸',
   EUR: '🇪🇺',
   GBP: '🇬🇧',
@@ -43,6 +44,20 @@ export const CURRENCY_SYMBOLS: Record<string, string> = {
   INR: '🇮🇳',
   NZD: '🇳🇿',
   IRD: '🇮🇪',
+};
+
+// Symbols for price display
+export const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  AUD: 'A$',
+  CAD: 'C$',
+  SGD: 'S$',
+  JPY: '¥',
+  INR: '₹',
+  NZD: 'NZ$',
+  IRD: '₹',
 };
 
 export const convertPrice = (priceInUSD: number, targetCurrency: string): number => {

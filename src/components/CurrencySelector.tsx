@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCurrencyStore, CURRENCY_SYMBOLS } from '@/store/currencyStore';
+import { useCurrencyStore, CURRENCY_FLAGS } from '@/store/currencyStore';
 import { Check } from 'lucide-react';
 
 interface CurrencySelectorProps {
@@ -54,7 +54,7 @@ export default function CurrencySelector({ onConfirm }: CurrencySelectorProps) {
                   : 'border-border bg-cardbackground text-foreground hover:border-primary/50'
               }`}
             >
-              <span className="text-lg">{CURRENCY_SYMBOLS[currency]}</span>
+              <span className="text-lg">{CURRENCY_FLAGS[currency]}</span>
               <span>{currency}</span>
               {tempCurrency === currency && (
                 <motion.div

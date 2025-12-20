@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCurrencyStore, CURRENCY_SYMBOLS } from '@/store/currencyStore';
+import { useCurrencyStore, CURRENCY_FLAGS, CURRENCY_SYMBOLS } from '@/store/currencyStore';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +58,7 @@ export default function Header() {
               className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 border border-white/20"
             >
               <Globe size={18} />
-              <span>{CURRENCY_SYMBOLS[selectedCurrency]}</span>
+              <span>{CURRENCY_FLAGS[selectedCurrency]}</span>
               <span>{selectedCurrency}</span>
             </motion.button>
 
@@ -84,7 +84,7 @@ export default function Header() {
                           : 'text-white/80 hover:text-white'
                       }`}
                     >
-                      {CURRENCY_SYMBOLS[currency]} {currency}
+                      {CURRENCY_FLAGS[currency]} {currency}
                     </motion.button>
                   ))}
                 </motion.div>
@@ -160,7 +160,7 @@ export default function Header() {
                         : 'bg-white/10 text-white/80 hover:bg-white/20'
                     }`}
                   >
-                    {CURRENCY_SYMBOLS[currency]} {currency}
+                    {CURRENCY_FLAGS[currency]} {currency}
                   </motion.button>
                 ))}
               </div>
