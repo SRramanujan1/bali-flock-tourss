@@ -43,6 +43,12 @@ export default function Header() {
           >
             Destination
           </Link>
+          <Link
+            to="/about"
+            className="text-white/80 font-semibold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-400 hover:to-cyan-400 transition-all duration-300"
+          >
+            About Us
+          </Link>
           <motion.button 
             className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-200 shadow-lg shadow-purple-500/50"
             whileHover={{ scale: 1.05 }}
@@ -90,6 +96,13 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
             >
               Destination
+            </Link>
+            <Link
+              to="/about"
+              className="text-white/80 font-semibold hover:text-pink-400 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              About Us
             </Link>
             <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold px-6 py-3 rounded-full transition-all duration-200 w-full">
               Book Now

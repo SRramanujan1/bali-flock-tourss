@@ -9,6 +9,7 @@ import PackageCustomizerPage from '@/components/pages/PackageCustomizerPage';
 import DestinationPage from '@/components/pages/DestinationPage';
 import BookingConfirmationPage from '@/components/pages/BookingConfirmationPage';
 import MyQuotesPage from '@/components/pages/MyQuotesPage';
+import AboutPage from '@/components/pages/AboutPage';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "my-quotes",
         element: <MyQuotesPage />,
+      },
+      {
+        path: "about",
+        element: <AboutPage />,
       },
       {
         path: "*",
