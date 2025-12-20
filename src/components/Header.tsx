@@ -38,12 +38,6 @@ export default function Header() {
             Packages
           </Link>
           <Link
-            to="/destination"
-            className="text-white/80 font-semibold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-400 hover:to-cyan-400 transition-all duration-300"
-          >
-            Destination
-          </Link>
-          <Link
             to="/about"
             className="text-white/80 font-semibold hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-400 hover:to-cyan-400 transition-all duration-300"
           >
@@ -89,13 +83,6 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
             >
               Packages
-            </Link>
-            <Link
-              to="/destination"
-              className="text-white/80 font-semibold hover:text-pink-400 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Destination
             </Link>
             <Link
               to="/about"

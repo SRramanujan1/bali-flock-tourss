@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Clock, Users, Zap, Music, Flame, Star } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
-import { HolidayPackages, Activities, Testimonials } from '@/entities';
+import { HolidayPackages, Activities, CustomerTestimonials } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
@@ -11,7 +11,7 @@ import { Image } from '@/components/ui/image';
 export default function HomePage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
   const [activities, setActivities] = useState<Activities[]>([]);
-  const [testimonials, setTestimonials] = useState<Testimonials[]>([]);
+  const [testimonials, setTestimonials] = useState<CustomerTestimonials[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function HomePage() {
         const [packagesData, activitiesData, testimonialsData] = await Promise.all([
           BaseCrudService.getAll<HolidayPackages>('holidaypackages'),
           BaseCrudService.getAll<Activities>('activities'),
-          BaseCrudService.getAll<Testimonials>('testimonials'),
+          BaseCrudService.getAll<CustomerTestimonials>('testimonials'),
         ]);
         setPackages(packagesData.items.slice(0, 3));
         setActivities(activitiesData.items);

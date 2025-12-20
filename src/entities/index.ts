@@ -115,27 +115,6 @@ export interface CustomPackageQuotes {
 
 /**
  * Collection ID: testimonials
- * Interface for Testimonials
- */
-export interface Testimonials {
-  _id: string;
-  _createdDate?: Date;
-  _updatedDate?: Date;
-  /** @wixFieldType text */
-  customerName?: string;
-  /** @wixFieldType text */
-  reviewText?: string;
-  /** @wixFieldType number */
-  rating?: number;
-  /** @wixFieldType image */
-  customerImage?: string;
-  /** @wixFieldType boolean */
-  isApproved?: boolean;
-}
-
-
-/**
- * Collection ID: testimonials
  * Interface for CustomerTestimonials
  */
 export interface CustomerTestimonials {

@@ -1,2 +1,2 @@
 // Re-export from main entities file for backward compatibility
-export type { Testimonials } from './index';
+export type { CustomerTestimonials } from './index';
