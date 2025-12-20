@@ -7,7 +7,7 @@ interface CurrencySelectorProps {
   onConfirm?: () => void;
 }
 
-const AVAILABLE_CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'SGD', 'JPY', 'INR', 'NZD', 'IRD'];
+const AVAILABLE_CURRENCIES = ['NZD', 'AUD', 'EUR', 'USD', 'GBP', 'CAD', 'SGD', 'JPY', 'INR', 'IRD'];
 
 export default function CurrencySelector({ onConfirm }: CurrencySelectorProps) {
   const { selectedCurrency, setSelectedCurrency } = useCurrencyStore();
