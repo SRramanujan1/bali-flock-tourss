@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useCurrencyStore, convertPrice, formatPrice } from '@/store/currencyStore';
 
 interface CustomizationState {
   numberOfPeople: number;
@@ -30,6 +31,7 @@ export default function PackageCustomizerPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { member, isAuthenticated } = useMember();
+  const { selectedCurrency } = useCurrencyStore();
   
   const [pkg, setPkg] = useState<HolidayPackages | null>(null);
   const [activities, setActivities] = useState<Activities[]>([]);
@@ -90,6 +92,10 @@ export default function PackageCustomizerPage() {
   );
   const totalPrice = basePrice + activitiesPrice;
 
+  const basePriceConverted = convertPrice(basePrice, selectedCurrency);
+  const activitiesPriceConverted = convertPrice(activitiesPrice, selectedCurrency);
+  const totalPriceConverted = convertPrice(totalPrice, selectedCurrency);
+
   const generateItinerary = () => {
     const baseItinerary = pkg?.itinerary || '';
     if (selectedActivityObjects.length === 0) {
@@ -113,15 +119,16 @@ Number of People: ${customization.numberOfPeople}
 Dates: ${customization.dates || 'To be confirmed'}
 Accommodation: ${customization.accommodation || 'To be confirmed'}
 Flights: ${customization.flights || 'To be confirmed'}
+Currency: ${selectedCurrency}
 
-BASE PACKAGE PRICE: $${basePrice.toFixed(2)}
+BASE PACKAGE PRICE: ${formatPrice(basePriceConverted, selectedCurrency)}
 
 SELECTED ACTIVITIES:
-${selectedActivityObjects.map((a) => `• ${a.name} - $${(a.pricePerPerson || 0) * customization.numberOfPeople} (${customization.numberOfPeople} people × $${a.pricePerPerson})`).join('\n')}
+${selectedActivityObjects.map((a) => `• ${a.name} - ${formatPrice(convertPrice((a.pricePerPerson || 0) * customization.numberOfPeople, selectedCurrency), selectedCurrency)} (${customization.numberOfPeople} people × ${formatPrice(convertPrice(a.pricePerPerson || 0, selectedCurrency), selectedCurrency)})`).join('\n')}
 
-ACTIVITIES SUBTOTAL: $${activitiesPrice.toFixed(2)}
+ACTIVITIES SUBTOTAL: ${formatPrice(activitiesPriceConverted, selectedCurrency)}
 
-TOTAL QUOTE: $${totalPrice.toFixed(2)}
+TOTAL QUOTE: ${formatPrice(totalPriceConverted, selectedCurrency)}
 
 CUSTOM ITINERARY:
 ${itinerary}`;
@@ -477,7 +484,7 @@ ${itinerary}`;
               <div className="space-y-3 pb-6 border-b border-white/20">
                 <div className="flex justify-between text-sm">
                   <span>Base Package:</span>
-                  <span>${basePrice.toFixed(2)}</span>
+                  <span>{formatPrice(basePriceConverted, selectedCurrency)}</span>
                 </div>
                 {selectedActivityObjects.length > 0 && (
                   <>
@@ -488,7 +495,7 @@ ${itinerary}`;
                       <div key={activity._id} className="flex justify-between text-xs text-white/90">
                         <span>{activity.name}:</span>
                         <span>
-                          ${(activity.pricePerPerson || 0) * customization.numberOfPeople}
+                          {formatPrice(convertPrice((activity.pricePerPerson || 0) * customization.numberOfPeople, selectedCurrency), selectedCurrency)}
                         </span>
                       </div>
                     ))}
@@ -497,7 +504,7 @@ ${itinerary}`;
                 {activitiesPrice > 0 && (
                   <div className="flex justify-between text-sm pt-2">
                     <span>Activities Subtotal:</span>
-                    <span>${activitiesPrice.toFixed(2)}</span>
+                    <span>{formatPrice(activitiesPriceConverted, selectedCurrency)}</span>
                   </div>
                 )}
               </div>
@@ -506,7 +513,7 @@ ${itinerary}`;
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total Quote:</span>
-                  <span className="text-3xl font-bold">${totalPrice.toFixed(2)}</span>
+                  <span className="text-3xl font-bold">{formatPrice(totalPriceConverted, selectedCurrency)}</span>
                 </div>
                 <p className="text-xs text-white/70">
                   For {customization.numberOfPeople} {customization.numberOfPeople === 1 ? 'person' : 'people'}

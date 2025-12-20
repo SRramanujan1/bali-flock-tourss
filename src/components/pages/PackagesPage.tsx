@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Users, DollarSign, Search } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { HolidayPackages } from '@/entities';
@@ -8,6 +8,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
 import ImageSlideshow from '@/components/ImageSlideshow';
+import CurrencySelector from '@/components/CurrencySelector';
+import { useCurrencyStore, convertPrice, formatPrice } from '@/store/currencyStore';
 
 // Slideshow images for stag party packages
 const STAG_SLIDESHOW_IMAGES = [
@@ -31,6 +33,17 @@ export default function PackagesPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [showCurrencySelector, setShowCurrencySelector] = useState(false);
+  const { selectedCurrency } = useCurrencyStore();
+
+  useEffect(() => {
+    // Check if currency has been selected (not first visit)
+    const currencySelected = localStorage.getItem('currency-selected');
+    if (!currencySelected) {
+      setShowCurrencySelector(true);
+      localStorage.setItem('currency-selected', 'true');
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -95,6 +108,12 @@ export default function PackagesPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
+
+      <AnimatePresence>
+        {showCurrencySelector && (
+          <CurrencySelector onConfirm={() => setShowCurrencySelector(false)} />
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-secondary py-16 md:py-20">
@@ -237,7 +256,7 @@ export default function PackagesPage() {
                   )}
                   <div className="absolute top-4 right-4 bg-primary text-white px-4 py-2 rounded-full font-bold flex items-center gap-1">
                     <DollarSign size={16} />
-                    {pkg.price}
+                    {formatPrice(convertPrice(pkg.price || 0, selectedCurrency), selectedCurrency)}
                   </div>
                   {pkg.holidayStyle && (
                     <div className="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">

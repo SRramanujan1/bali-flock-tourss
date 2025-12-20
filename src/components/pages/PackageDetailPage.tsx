@@ -7,11 +7,13 @@ import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
+import { useCurrencyStore, convertPrice, formatPrice } from '@/store/currencyStore';
 
 export default function PackageDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [pkg, setPkg] = useState<HolidayPackages | null>(null);
   const [loading, setLoading] = useState(true);
+  const { selectedCurrency } = useCurrencyStore();
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -189,7 +191,7 @@ export default function PackageDetailPage() {
               {/* Price */}
               <div className="mb-8">
                 <p className="text-white/80 text-sm mb-2">Starting from</p>
-                <p className="text-5xl font-bold">${pkg.price}</p>
+                <p className="text-5xl font-bold">{formatPrice(convertPrice(pkg.price || 0, selectedCurrency), selectedCurrency)}</p>
                 <p className="text-white/80 text-sm mt-2">per person</p>
               </div>
 

@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useCurrencyStore, CURRENCY_SYMBOLS } from '@/store/currencyStore';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+  const { selectedCurrency, setSelectedCurrency } = useCurrencyStore();
+
+  const AVAILABLE_CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'SGD', 'JPY', 'INR'];
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -43,6 +48,50 @@ export default function Header() {
           >
             About Us
           </Link>
+
+          {/* Currency Selector */}
+          <div className="relative">
+            <motion.button
+              onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 border border-white/20"
+            >
+              <Globe size={18} />
+              <span>{CURRENCY_SYMBOLS[selectedCurrency]}</span>
+              <span>{selectedCurrency}</span>
+            </motion.button>
+
+            <AnimatePresence>
+              {showCurrencyDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute top-full right-0 mt-2 bg-slate-900 border border-purple-500/30 rounded-lg shadow-xl z-50 min-w-max"
+                >
+                  {AVAILABLE_CURRENCIES.map((currency) => (
+                    <motion.button
+                      key={currency}
+                      onClick={() => {
+                        setSelectedCurrency(currency);
+                        setShowCurrencyDropdown(false);
+                      }}
+                      whileHover={{ backgroundColor: 'rgba(168, 85, 247, 0.1)' }}
+                      className={`w-full text-left px-4 py-2 font-semibold transition-colors ${
+                        selectedCurrency === currency
+                          ? 'text-pink-400 bg-white/10'
+                          : 'text-white/80 hover:text-white'
+                      }`}
+                    >
+                      {CURRENCY_SYMBOLS[currency]} {currency}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <motion.button 
             className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all duration-200 shadow-lg shadow-purple-500/50"
             whileHover={{ scale: 1.05 }}
@@ -91,6 +140,32 @@ export default function Header() {
             >
               About Us
             </Link>
+
+            {/* Mobile Currency Selector */}
+            <div className="border-t border-purple-500/30 pt-4 mt-4">
+              <p className="text-white/60 text-sm font-semibold mb-3">Select Currency</p>
+              <div className="grid grid-cols-2 gap-2">
+                {AVAILABLE_CURRENCIES.map((currency) => (
+                  <motion.button
+                    key={currency}
+                    onClick={() => {
+                      setSelectedCurrency(currency);
+                      setIsOpen(false);
+                    }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`px-3 py-2 rounded-lg font-semibold transition-all ${
+                      selectedCurrency === currency
+                        ? 'bg-pink-500 text-white'
+                        : 'bg-white/10 text-white/80 hover:bg-white/20'
+                    }`}
+                  >
+                    {CURRENCY_SYMBOLS[currency]} {currency}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
             <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold px-6 py-3 rounded-full transition-all duration-200 w-full">
               Book Now
             </button>
