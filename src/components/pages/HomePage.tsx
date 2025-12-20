@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Clock, Users, Zap, Music, Flame } from 'lucide-react';
+import { ArrowRight, MapPin, Clock, Users, Zap, Music, Flame, Star } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
-import { HolidayPackages, Activities } from '@/entities';
+import { HolidayPackages, Activities, Testimonials } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
@@ -11,17 +11,20 @@ import { Image } from '@/components/ui/image';
 export default function HomePage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
   const [activities, setActivities] = useState<Activities[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonials[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [packagesData, activitiesData] = await Promise.all([
+        const [packagesData, activitiesData, testimonialsData] = await Promise.all([
           BaseCrudService.getAll<HolidayPackages>('holidaypackages'),
           BaseCrudService.getAll<Activities>('activities'),
+          BaseCrudService.getAll<Testimonials>('testimonials'),
         ]);
         setPackages(packagesData.items.slice(0, 3));
         setActivities(activitiesData.items);
+        setTestimonials(testimonialsData.items.filter(t => t.isApproved));
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -232,7 +235,7 @@ export default function HomePage() {
         </motion.div>
       </section>
       {/* Activities Gallery Section */}
-      <section className="max-w-[100rem] mx-auto px-6 py-20\">
+      <section className="max-w-[100rem] mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -251,7 +254,7 @@ export default function HomePage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-80 animate-pulse border border-purple-500/30\"></div>
+              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-80 animate-pulse border border-purple-500/30"></div>
             ))}
           </div>
         ) : (
@@ -321,7 +324,85 @@ export default function HomePage() {
           </motion.div>
         )}
       </section>
-      {/* ... keep existing code (Why Choose Us section and CTA section) ... */}
+      {/* Testimonials Section */}
+      <section className="max-w-[100rem] mx-auto px-6 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
+            What Our Travelers Say
+          </h2>
+          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
+            Real experiences from real travelers who've had the time of their lives
+          </p>
+        </motion.div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-80 animate-pulse border border-purple-500/30"></div>
+            ))}
+          </div>
+        ) : testimonials.length > 0 ? (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {testimonials.map((testimonial) => (
+              <motion.div
+                key={testimonial._id}
+                variants={itemVariants}
+                className="group bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-4 backdrop-blur-sm p-8 flex flex-col"
+              >
+                {/* Rating Stars */}
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={20}
+                      className={i < (testimonial.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-purple-400/30'}
+                    />
+                  ))}
+                </div>
+
+                {/* Review Text */}
+                <p className="text-purple-200/80 font-medium mb-6 flex-grow italic">
+                  "{testimonial.reviewText}"
+                </p>
+
+                {/* Customer Info */}
+                <div className="flex items-center gap-4 pt-6 border-t border-purple-500/30">
+                  {testimonial.customerImage && (
+                    <Image
+                      src={testimonial.customerImage}
+                      alt={testimonial.customerName || 'Customer'}
+                      className="w-12 h-12 rounded-full object-cover"
+                      width={48}
+                    />
+                  )}
+                  <div>
+                    <h4 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400">
+                      {testimonial.customerName}
+                    </h4>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-purple-200/60 text-lg">No testimonials available yet. Be the first to share your experience!</p>
+          </div>
+        )}
+      </section>
+      {/* Why Choose Us Section */}
       <section className="py-20 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-900/30 to-transparent"></div>
         <div className="max-w-[100rem] mx-auto px-6 relative z-10">
