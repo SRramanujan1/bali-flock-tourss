@@ -6,6 +6,13 @@ interface CurrencyState {
   setSelectedCurrency: (currency: string) => void;
 }
 
+interface BookingState {
+  confirmedBookings: Set<string>; // Set of package IDs with confirmed bookings
+  confirmBooking: (packageId: string) => void;
+  isBookingConfirmed: (packageId: string) => boolean;
+  clearConfirmedBooking: (packageId: string) => void;
+}
+
 export const useCurrencyStore = create<CurrencyState>()(
   persist(
     (set) => ({
@@ -66,6 +73,47 @@ export const convertPrice = (priceInUSD: number, targetCurrency: string): number
 };
 
 export const formatPrice = (price: number, currency: string): string => {
-  const symbol = CURRENCY_SYMBOLS[currency] || '$';
+  const symbol = CURRENCY_SYMBOLS[currency] || '
+
+// Booking confirmation store
+export const useBookingStore = create<BookingState>()((set, get) => ({
+  confirmedBookings: new Set<string>(),
+  confirmBooking: (packageId: string) => {
+    const current = get().confirmedBookings;
+    const updated = new Set(current);
+    updated.add(packageId);
+    set({ confirmedBookings: updated });
+  },
+  isBookingConfirmed: (packageId: string) => {
+    return get().confirmedBookings.has(packageId);
+  },
+  clearConfirmedBooking: (packageId: string) => {
+    const current = get().confirmedBookings;
+    const updated = new Set(current);
+    updated.delete(packageId);
+    set({ confirmedBookings: updated });
+  },
+}));
+;
   return `${symbol}${price.toLocaleString()}`;
 };
+
+// Booking confirmation store
+export const useBookingStore = create<BookingState>()((set, get) => ({
+  confirmedBookings: new Set<string>(),
+  confirmBooking: (packageId: string) => {
+    const current = get().confirmedBookings;
+    const updated = new Set(current);
+    updated.add(packageId);
+    set({ confirmedBookings: updated });
+  },
+  isBookingConfirmed: (packageId: string) => {
+    return get().confirmedBookings.has(packageId);
+  },
+  clearConfirmedBooking: (packageId: string) => {
+    const current = get().confirmedBookings;
+    const updated = new Set(current);
+    updated.delete(packageId);
+    set({ confirmedBookings: updated });
+  },
+}));

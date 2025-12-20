@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Mail, Download, CheckCircle2, AlertCircle, Save } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { useMember } from '@/integrations';
-import { HolidayPackages, Activities, CustomPackageQuotes } from '@/entities';
+import { HolidayPackages, Activities, CustomPackageQuotes, Bookings } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
@@ -13,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useCurrencyStore, convertPrice, formatPrice } from '@/store/currencyStore';
+import { useBookingStore } from '@/store/currencyStore';
 
 interface CustomizationState {
   numberOfPeople: number;
@@ -51,6 +52,8 @@ export default function PackageCustomizerPage() {
   const [emailInput, setEmailInput] = useState('');
   const [quoteSaved, setQuoteSaved] = useState(false);
   const [savingQuote, setSavingQuote] = useState(false);
+  const { confirmBooking } = useBookingStore();
+  const [bookingInProgress, setBookingInProgress] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {

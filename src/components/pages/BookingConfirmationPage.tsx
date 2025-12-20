@@ -7,6 +7,7 @@ import { Bookings } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
+import { useBookingStore } from '@/store/currencyStore';
 
 interface BookingWithCustomization extends Bookings {
   customizationDetails?: string;
@@ -16,8 +17,10 @@ export default function BookingConfirmationPage() {
   const [searchParams] = useSearchParams();
   const [booking, setBooking] = useState<BookingWithCustomization | null>(null);
   const [loading, setLoading] = useState(true);
+  const { confirmBooking } = useBookingStore();
 
   const bookingId = searchParams.get('id');
+  const packageId = searchParams.get('packageId');
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -29,6 +32,11 @@ export default function BookingConfirmationPage() {
       try {
         const bookingData = await BaseCrudService.getById<BookingWithCustomization>('bookings', bookingId);
         setBooking(bookingData);
+        
+        // Mark the package booking as confirmed
+        if (packageId) {
+          confirmBooking(packageId);
+        }
       } catch (error) {
         console.error('Error fetching booking:', error);
       } finally {
@@ -37,7 +45,7 @@ export default function BookingConfirmationPage() {
     };
 
     fetchBooking();
-  }, [bookingId]);
+  }, [bookingId, packageId, confirmBooking]);
 
   const handleDownloadConfirmation = () => {
     if (!booking) return;

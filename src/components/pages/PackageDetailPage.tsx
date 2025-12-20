@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Clock, Users, MapPin, DollarSign, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Clock, Users, MapPin, DollarSign, CheckCircle, Lock } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
 import { useCurrencyStore, convertPrice, formatPrice } from '@/store/currencyStore';
+import { useBookingStore } from '@/store/currencyStore';
 
 export default function PackageDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [pkg, setPkg] = useState<HolidayPackages | null>(null);
   const [loading, setLoading] = useState(true);
   const { selectedCurrency } = useCurrencyStore();
+  const { isBookingConfirmed } = useBookingStore();
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -136,24 +138,50 @@ export default function PackageDetailPage() {
             {/* Itinerary */}
             {itineraryItems.length > 0 && (
               <div>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Itinerary</h2>
-                <div className="space-y-4">
-                  {itineraryItems.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      viewport={{ once: true }}
-                      className="flex gap-4 p-4 bg-cardbackground rounded-lg hover:shadow-md transition-shadow"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
-                        {index + 1}
-                      </div>
-                      <p className="text-foreground pt-1">{item}</p>
-                    </motion.div>
-                  ))}
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 className="text-3xl font-bold text-foreground">Itinerary</h2>
+                  {!isBookingConfirmed(id || '') && (
+                    <div className="flex items-center gap-2 bg-warning/10 px-3 py-1 rounded-full">
+                      <Lock size={16} className="text-warning" />
+                      <span className="text-sm font-semibold text-warning">Locked</span>
+                    </div>
+                  )}
                 </div>
+                
+                {isBookingConfirmed(id || '') ? (
+                  <div className="space-y-4">
+                    {itineraryItems.map((item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="flex gap-4 p-4 bg-cardbackground rounded-lg hover:shadow-md transition-shadow"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
+                          {index + 1}
+                        </div>
+                        <p className="text-foreground pt-1">{item}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="bg-gradient-to-br from-warning/5 to-warning/10 border-2 border-dashed border-warning/30 rounded-lg p-8 text-center"
+                  >
+                    <Lock size={40} className="text-warning/60 mx-auto mb-4" />
+                    <h3 className="text-lg font-bold text-foreground mb-2">Itinerary Locked</h3>
+                    <p className="text-muted mb-4">
+                      The detailed itinerary will be revealed after you confirm your booking.
+                    </p>
+                    <p className="text-sm text-muted">
+                      Complete your booking to view the full day-by-day schedule and activities.
+                    </p>
+                  </motion.div>
+                )}
               </div>
             )}
 
