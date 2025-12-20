@@ -244,7 +244,7 @@ export default function HomePage() {
             Epic Activities & Experiences
           </h2>
           <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
-            Discover the incredible activities that make your Bali party unforgettable
+            Discover the incredible activities that make your Bali trip unforgettable
           </p>
         </motion.div>
 
