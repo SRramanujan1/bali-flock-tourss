@@ -1,29 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Clock, Users, Zap, Music, Flame, Star } from 'lucide-react';
+import { ArrowRight, Clock, Users, Zap, Music, Flame, Star } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
-import { HolidayPackages, Activities, CustomerTestimonials } from '@/entities';
+import { HolidayPackages, CustomerTestimonials } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
 
 export default function HomePage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
-  const [activities, setActivities] = useState<Activities[]>([]);
   const [testimonials, setTestimonials] = useState<CustomerTestimonials[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [packagesData, activitiesData, testimonialsData] = await Promise.all([
+        const [packagesData, testimonialsData] = await Promise.all([
           BaseCrudService.getAll<HolidayPackages>('holidaypackages'),
-          BaseCrudService.getAll<Activities>('activities'),
           BaseCrudService.getAll<CustomerTestimonials>('testimonials'),
         ]);
         setPackages(packagesData.items.slice(0, 3));
-        setActivities(activitiesData.items);
         setTestimonials(testimonialsData.items.filter(t => t.isApproved));
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -233,96 +230,6 @@ export default function HomePage() {
             View All Packages <ArrowRight size={20} />
           </Link>
         </motion.div>
-      </section>
-      {/* Activities Gallery Section */}
-      <section className="max-w-[100rem] mx-auto px-6 py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
-            Epic Activities & Experiences
-          </h2>
-          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
-            Discover the incredible activities that make your Bali trip unforgettable
-          </p>
-        </motion.div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-80 animate-pulse border border-purple-500/30"></div>
-            ))}
-          </div>
-        ) : (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {activities.map((activity) => (
-              <motion.div
-                key={activity._id}
-                variants={itemVariants}
-                className="group bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-4 backdrop-blur-sm"
-              >
-                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-purple-900 to-slate-900">
-                  {activity.activityImage && (
-                    <Image
-                      src={activity.activityImage}
-                      alt={activity.name || 'Activity'}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      width={400}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  {activity.category && (
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg shadow-purple-500/50">
-                      {activity.category}
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-2">
-                    {activity.name}
-                  </h3>
-                  <p className="text-purple-200/70 text-sm mb-4 line-clamp-2 font-medium">
-                    {activity.description}
-                  </p>
-
-                  <div className="space-y-2 mb-6 pb-6 border-b border-purple-500/30">
-                    {activity.location && (
-                      <div className="flex items-center gap-2 text-sm text-purple-200/60">
-                        <MapPin size={16} className="text-cyan-400 flex-shrink-0" />
-                        <span className="font-medium">{activity.location}</span>
-                      </div>
-                    )}
-                    {activity.pricePerPerson && (
-                      <div className="flex items-center gap-2 text-sm text-purple-200/60">
-                        <span className="font-bold text-pink-400">${activity.pricePerPerson}</span>
-                        <span className="text-purple-200/50">per person</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black py-3 rounded-lg transition-all duration-200 shadow-lg shadow-purple-500/50"
-                  >
-                    Learn More
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
       </section>
       {/* Testimonials Section */}
       <section className="max-w-[100rem] mx-auto px-6 py-20">
