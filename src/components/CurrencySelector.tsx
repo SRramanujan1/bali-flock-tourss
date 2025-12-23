@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCurrencyStore, CURRENCY_FLAGS } from '@/store/currencyStore';
+import { useCurrencyStore, CURRENCY_FLAGS, CURRENCY_RATES } from '@/store/currencyStore';
 import { Check } from 'lucide-react';
 
 interface CurrencySelectorProps {
   onConfirm?: () => void;
 }
 
-const AVAILABLE_CURRENCIES = ['NZD', 'AUD', 'EUR', 'USD', 'GBP', 'CAD', 'SGD', 'JPY', 'INR', 'IRD'];
+// Dynamically get all available currencies from the store
+const AVAILABLE_CURRENCIES = Object.keys(CURRENCY_RATES);
 
 export default function CurrencySelector({ onConfirm }: CurrencySelectorProps) {
   const { selectedCurrency, setSelectedCurrency } = useCurrencyStore();
