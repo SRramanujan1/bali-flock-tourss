@@ -96,3 +96,49 @@ export const useBookingStore = create<BookingState>()((set, get) => ({
     set({ confirmedBookings: updated });
   },
 }));
+
+// Package customization store for tracking selected activities
+interface PackageCustomizationState {
+  selectedActivities: Record<string, string[]>; // packageId -> array of activity IDs
+  addActivity: (packageId: string, activityId: string) => void;
+  removeActivity: (packageId: string, activityId: string) => void;
+  isActivitySelected: (packageId: string, activityId: string) => boolean;
+  getSelectedActivities: (packageId: string) => string[];
+  clearActivities: (packageId: string) => void;
+}
+
+export const usePackageCustomizationStore = create<PackageCustomizationState>()((set, get) => ({
+  selectedActivities: {},
+  addActivity: (packageId: string, activityId: string) => {
+    const current = get().selectedActivities[packageId] || [];
+    if (!current.includes(activityId)) {
+      set({
+        selectedActivities: {
+          ...get().selectedActivities,
+          [packageId]: [...current, activityId],
+        },
+      });
+    }
+  },
+  removeActivity: (packageId: string, activityId: string) => {
+    const current = get().selectedActivities[packageId] || [];
+    set({
+      selectedActivities: {
+        ...get().selectedActivities,
+        [packageId]: current.filter((id) => id !== activityId),
+      },
+    });
+  },
+  isActivitySelected: (packageId: string, activityId: string) => {
+    const current = get().selectedActivities[packageId] || [];
+    return current.includes(activityId);
+  },
+  getSelectedActivities: (packageId: string) => {
+    return get().selectedActivities[packageId] || [];
+  },
+  clearActivities: (packageId: string) => {
+    const updated = { ...get().selectedActivities };
+    delete updated[packageId];
+    set({ selectedActivities: updated });
+  },
+}));
