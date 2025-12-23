@@ -181,7 +181,7 @@ export default function PackageDetailPage() {
             {isStagPackage && includedActivities.length > 0 && (
               <div>
                 <h2 className="text-3xl font-bold text-foreground mb-6">What's Included</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   {includedActivities.map((activity, index) => (
                     <motion.div
                       key={activity._id}
@@ -189,16 +189,40 @@ export default function PackageDetailPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex gap-4 p-4 bg-success/10 rounded-lg border border-success/20"
+                      className="rounded-lg overflow-hidden border-2 border-success/30 bg-success/5 hover:shadow-lg transition-all duration-200"
                     >
-                      <div className="w-12 h-12 rounded-lg bg-success/20 flex items-center justify-center flex-shrink-0">
-                        <CheckCircle size={24} className="text-success" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-foreground mb-1">{activity.name}</h3>
-                        <p className="text-sm text-muted mb-2">{activity.description}</p>
+                      {/* Activity Image */}
+                      {activity.activityImage && (
+                        <div className="relative h-48 overflow-hidden bg-cardbackground">
+                          <Image
+                            src={activity.activityImage}
+                            alt={activity.name || 'Activity'}
+                            className="w-full h-full object-cover"
+                            width={300}
+                          />
+                          <div className="absolute top-3 right-3 bg-success text-white px-3 py-1 rounded-full flex items-center gap-1 text-sm font-semibold">
+                            <CheckCircle size={16} />
+                            Included
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Activity Info */}
+                      <div className="p-5">
+                        <h3 className="font-bold text-lg text-foreground mb-2">{activity.name}</h3>
+                        <p className="text-sm text-muted mb-3 line-clamp-3">{activity.description}</p>
+                        
                         {activity.location && (
-                          <p className="text-xs text-muted-foreground">📍 {activity.location}</p>
+                          <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1">
+                            📍 {activity.location}
+                          </p>
+                        )}
+
+                        {/* Category Badge */}
+                        {activity.category && (
+                          <div className="inline-block bg-success/20 text-success px-3 py-1 rounded-full text-xs font-semibold">
+                            {activity.category}
+                          </div>
                         )}
                       </div>
                     </motion.div>
