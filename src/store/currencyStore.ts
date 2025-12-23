@@ -73,28 +73,7 @@ export const convertPrice = (priceInUSD: number, targetCurrency: string): number
 };
 
 export const formatPrice = (price: number, currency: string): string => {
-  const symbol = CURRENCY_SYMBOLS[currency] || '
-
-// Booking confirmation store
-export const useBookingStore = create<BookingState>()((set, get) => ({
-  confirmedBookings: new Set<string>(),
-  confirmBooking: (packageId: string) => {
-    const current = get().confirmedBookings;
-    const updated = new Set(current);
-    updated.add(packageId);
-    set({ confirmedBookings: updated });
-  },
-  isBookingConfirmed: (packageId: string) => {
-    return get().confirmedBookings.has(packageId);
-  },
-  clearConfirmedBooking: (packageId: string) => {
-    const current = get().confirmedBookings;
-    const updated = new Set(current);
-    updated.delete(packageId);
-    set({ confirmedBookings: updated });
-  },
-}));
-;
+  const symbol = CURRENCY_SYMBOLS[currency] || '';
   return `${symbol}${price.toLocaleString()}`;
 };
 
