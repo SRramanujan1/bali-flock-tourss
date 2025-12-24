@@ -21,10 +21,11 @@ export default function PackageDetailPage() {
 
   // Define included activities for Stag packages
   const STAG_INCLUDED_ACTIVITIES = [
+    'white water rafting',
+    'water sport',
     'paint ball',
-    'ATV riding',
-    'water sports',
-    'VIP FINNS experience'
+    'beer bicycle',
+    'ultimate FINNS experience'
   ];
 
   useEffect(() => {
