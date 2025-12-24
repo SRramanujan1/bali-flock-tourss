@@ -24,7 +24,7 @@ export default function PackageDetailPage() {
     'white water rafting',
     'paintball',
     'atv riding',
-    'water sport',
+    'jetski experience',
     'finns ultimate vip experience'
   ];
 
