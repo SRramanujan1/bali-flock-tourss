@@ -38,6 +38,11 @@ export default function PackageDetailPage() {
         // Fetch all activities
         const { items } = await BaseCrudService.getAll<Activities>('activities');
         setActivities(items || []);
+        
+        // Debug: Log activities for troubleshooting
+        if (items && items.length > 0) {
+          console.log('Available activities:', items.map(a => ({ name: a.name, id: a._id })));
+        }
       } catch (error) {
         console.error('Error fetching package:', error);
       } finally {
@@ -89,11 +94,16 @@ export default function PackageDetailPage() {
 
   // Get included activities for Stag packages
   const includedActivities = isStagPackage
-    ? activities.filter((activity) =>
-        STAG_INCLUDED_ACTIVITIES.some((included) =>
-          activity.name?.toLowerCase().includes(included.toLowerCase())
-        )
-      )
+    ? activities.filter((activity) => {
+        const activityNameLower = activity.name?.toLowerCase() || '';
+        return STAG_INCLUDED_ACTIVITIES.some((included) => {
+          const includedLower = included.toLowerCase();
+          // Try exact match first, then partial match
+          return activityNameLower === includedLower || 
+                 activityNameLower.includes(includedLower) ||
+                 includedLower.includes(activityNameLower);
+        });
+      })
     : [];
 
   // Get available activities for "Add More Activities" section
@@ -176,6 +186,19 @@ export default function PackageDetailPage() {
                 {pkg.description}
               </p>
             </div>
+
+            {/* Debug Info - Remove in production */}
+            {isStagPackage && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm">
+                <p className="font-semibold text-yellow-900 mb-2">Debug Info:</p>
+                <p className="text-yellow-800">Total activities available: {activities.length}</p>
+                <p className="text-yellow-800">Included activities found: {includedActivities.length}</p>
+                <p className="text-yellow-800 text-xs mt-2">Looking for: {STAG_INCLUDED_ACTIVITIES.join(', ')}</p>
+                {activities.length > 0 && (
+                  <p className="text-yellow-800 text-xs mt-2">Available: {activities.map(a => a.name).join(', ')}</p>
+                )}
+              </div>
+            )}
 
             {/* What's Included Section for Stag Packages */}
             {isStagPackage && includedActivities.length > 0 && (
