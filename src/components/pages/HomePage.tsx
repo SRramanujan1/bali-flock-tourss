@@ -7,6 +7,7 @@ import { HolidayPackages, CustomerTestimonials } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
+import { updateBucksPartyImage } from '@/services/updateBucksPartyImage';
 
 export default function HomePage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
@@ -16,6 +17,9 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Update bucks party image on page load
+        await updateBucksPartyImage();
+
         const [packagesData, testimonialsData] = await Promise.all([
           BaseCrudService.getAll<HolidayPackages>('holidaypackages'),
           BaseCrudService.getAll<CustomerTestimonials>('testimonials'),
