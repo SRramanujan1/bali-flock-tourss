@@ -27,6 +27,11 @@ const HENS_SLIDESHOW_IMAGES = [
   'https://static.wixstatic.com/media/b57044_5i6f5h4g8e9d0c1b2g3h4i5j6k7l8m9n~mv2.png?id=bali-swing-instagram',
 ];
 
+// Slideshow images for family villa packages
+const FAMILY_VILLA_SLIDESHOW_IMAGES = [
+  'https://static.wixstatic.com/media/b57044_3e362053ef074c5fa6c3d27ae63df37c~mv2.png?originWidth=1152&originHeight=768',
+];
+
 export default function PackagesPage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<HolidayPackages[]>([]);
