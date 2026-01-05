@@ -21,7 +21,7 @@ export interface Activities {
   pricePerPerson?: number;
   /** @wixFieldType text */
   category?: string;
-  /** @wixFieldType image */
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   activityImage?: string;
   /** @wixFieldType text */
   location?: string;
@@ -79,7 +79,7 @@ export interface HolidayPackages {
   price?: number;
   /** @wixFieldType text */
   duration?: string;
-  /** @wixFieldType image */
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   mainImage?: string;
   /** @wixFieldType text */
   itinerary?: string;
@@ -127,7 +127,7 @@ export interface CustomerTestimonials {
   reviewText?: string;
   /** @wixFieldType number */
   rating?: number;
-  /** @wixFieldType image */
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   customerImage?: string;
   /** @wixFieldType boolean */
   isApproved?: boolean;

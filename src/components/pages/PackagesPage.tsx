@@ -16,7 +16,7 @@ const STAG_SLIDESHOW_IMAGES = [
   'https://static.wixstatic.com/media/b57044_f2d5f7efe01b4828a8e5434d7e56870d~mv2.png?id=beach-club-party',
   'https://static.wixstatic.com/media/b57044_482443b572874c0587de531d0cd6cdce~mv2.png?id=paintball-adventure',
   'https://static.wixstatic.com/media/b57044_5c1e1b96a96244dfa02e1fd79af17dc2~mv2.png?id=white-water-rafting',
-  'https://static.wixstatic.com/media/b57044_ca5963dfd2444835bfb805f9846dcc44~mv2.png?id=bucks-celebration',
+  'https://static.wixstatic.com/media/b57044_07cdc70478534eb0ab27be0caf074891~mv2.png?originWidth=1152&originHeight=768',
 ];
 
 // Slideshow images for girls/hens escape packages
