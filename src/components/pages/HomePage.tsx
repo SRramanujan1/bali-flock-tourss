@@ -24,7 +24,7 @@ export default function HomePage() {
           BaseCrudService.getAll<HolidayPackages>('holidaypackages'),
           BaseCrudService.getAll<CustomerTestimonials>('testimonials'),
         ]);
-        setPackages(packagesData.items.slice(0, 3));
+        setPackages(packagesData.items);
         setTestimonials(testimonialsData.items.filter(t => t.isApproved));
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -147,20 +147,34 @@ export default function HomePage() {
       </section>
       {/* Featured Packages */}
       <section className="max-w-[100rem] mx-auto px-6 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
+            Our Packages
+          </h2>
+          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
+            Choose from our curated selection of unforgettable Bali experiences
+          </p>
+        </motion.div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-96 animate-pulse border border-purple-500/30"></div>
             ))}
           </div>
-        ) : (
+        ) : packages.length > 0 ? (
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {packages.map((pkg) => (
               <motion.div
@@ -219,21 +233,11 @@ export default function HomePage() {
               </motion.div>
             ))}
           </motion.div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-purple-200/60 text-lg">No packages available yet. Check back soon!</p>
+          </div>
         )}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <Link
-            to="/packages"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-bold text-lg transition-colors"
-          >
-            View All Packages <ArrowRight size={20} />
-          </Link>
-        </motion.div>
       </section>
       {/* Testimonials Section */}
       <section className="max-w-[100rem] mx-auto px-6 py-20">
