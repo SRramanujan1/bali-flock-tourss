@@ -1,3 +1,6 @@
+import TermsPage from '@/pages/TermsPage';
+import FAQPage from '@/pages/FAQPage';
+import ContactPage from '@/pages/ContactPage';
 import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
