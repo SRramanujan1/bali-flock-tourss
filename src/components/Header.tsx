@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCurrencyStore, CURRENCY_FLAGS, CURRENCY_SYMBOLS } from '@/store/currencyStore';
+import { useCurrencyStore, CURRENCY_FLAGS } from '@/store/currencyStore';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
