@@ -468,10 +468,8 @@ export default function PackageDetailPage() {
                 >
                   Customize Package
                 </Link>
-                <button className="w-full border-2 border-white text-white hover:bg-white/10 font-bold py-3 rounded-lg transition-all duration-200">
-                  Request Info
-                </button>
               </div>
+              
 
               {/* Trust Badge */}
               <div className="mt-8 pt-8 border-t border-white/20 text-center">
