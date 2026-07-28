@@ -9,7 +9,7 @@ export default function Header() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const { selectedCurrency, setSelectedCurrency } = useCurrencyStore();
 
-  const AVAILABLE_CURRENCIES = ['NZD', 'AUD', 'EUR', 'USD', 'GBP', 'CAD', 'SGD', 'JPY', 'INR', 'IRD'];
+  const AVAILABLE_CURRENCIES = ['NZD', 'AUD', 'EUR', 'USD', 'GBP', 'CAD', 'SGD', 'JPY', 'INR'];
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
