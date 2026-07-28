@@ -1,6 +1,3 @@
-import TermsPage from '@/pages/TermsPage';
-import FAQPage from '@/pages/FAQPage';
-import ContactPage from '@/pages/ContactPage';
 import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
@@ -14,6 +11,8 @@ import BookingConfirmationPage from '@/components/pages/BookingConfirmationPage'
 import MyQuotesPage from '@/components/pages/MyQuotesPage';
 import AboutPage from '@/components/pages/AboutPage';
 import AdminPage from '@/components/pages/AdminPage';
+import TermsPage from '@/components/pages/TermsPage';
+import FAQPage from '@/components/pages/FAQPage';
 
 function Layout() {
   return (
@@ -73,10 +72,6 @@ const router = createBrowserRouter([
       {
         path: "faq",
         element: <FAQPage />,
-      },
-      {
-        path: "contact",
-        element: <ContactPage />,
       },
       {
         path: "*",
