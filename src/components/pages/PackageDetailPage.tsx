@@ -20,7 +20,6 @@ export default function PackageDetailPage() {
   const { selectedCurrency } = useCurrencyStore();
   const { addActivity, removeActivity, isActivitySelected, getSelectedActivities } = usePackageCustomizationStore();
 
-  // Define included activities for Stag packages
   const STAG_INCLUDED_ACTIVITIES = [
     'white water rafting',
     'paintball',
@@ -35,8 +34,6 @@ export default function PackageDetailPage() {
       try {
         const item = await BaseCrudService.getById<HolidayPackages>('holidaypackages', id);
         setPkg(item);
-        
-        // Fetch all activities
         const { items } = await BaseCrudService.getAll<Activities>('activities');
         setActivities(items || []);
       } catch (error) {
@@ -45,7 +42,6 @@ export default function PackageDetailPage() {
         setLoading(false);
       }
     };
-
     fetchPackage();
   }, [id]);
 
@@ -84,36 +80,30 @@ export default function PackageDetailPage() {
     ? pkg.inclusions.split('\n').filter((item) => item.trim())
     : [];
 
-  // Check if this is a Stag package
-  const isStagPackage = pkg.packageName?.toLowerCase().includes('stag') || 
-                       pkg.packageName?.toLowerCase().includes('bucks');
+  const isStagPackage = pkg.packageName?.toLowerCase().includes('stag') ||
+    pkg.packageName?.toLowerCase().includes('bucks');
 
-  // Get included activities for Stag packages
   const includedActivities = isStagPackage
     ? activities.filter((activity) => {
         const activityNameLower = activity.name?.toLowerCase() || '';
         return STAG_INCLUDED_ACTIVITIES.some((included) => {
           const includedLower = included.toLowerCase();
-          // Try exact match first, then partial match
-          return activityNameLower === includedLower || 
-                 activityNameLower.includes(includedLower) ||
-                 includedLower.includes(activityNameLower);
+          return activityNameLower === includedLower ||
+            activityNameLower.includes(includedLower) ||
+            includedLower.includes(activityNameLower);
         });
       })
     : [];
 
-  // Get available activities for "Add More Activities" section
   const availableActivities = activities.filter((activity) =>
     !includedActivities.some((included) => included._id === activity._id)
   );
 
-  // Get selected activities for this package
   const selectedActivityIds = getSelectedActivities(id || '');
   const selectedActivitiesData = activities.filter((activity) =>
     selectedActivityIds.includes(activity._id)
   );
 
-  // Calculate total price including selected activities
   const basePrice = pkg?.price || 0;
   const additionalPrice = selectedActivitiesData.reduce((sum, activity) => {
     return sum + (activity.pricePerPerson || 0);
@@ -168,6 +158,7 @@ export default function PackageDetailPage() {
       {/* Package Info */}
       <section className="max-w-[100rem] mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
           {/* Main Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -178,12 +169,10 @@ export default function PackageDetailPage() {
             {/* Description */}
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-4">Overview</h2>
-              <p className="text-lg text-muted leading-relaxed">
-                {pkg.description}
-              </p>
+              <p className="text-lg text-muted leading-relaxed">{pkg.description}</p>
             </div>
 
-            {/* What's Included Section for Stag Packages */}
+            {/* What's Included — Stag Packages */}
             {isStagPackage && includedActivities.length > 0 && (
               <div>
                 <h2 className="text-3xl font-bold text-foreground mb-6">What's Included</h2>
@@ -197,7 +186,6 @@ export default function PackageDetailPage() {
                       viewport={{ once: true }}
                       className="rounded-lg overflow-hidden border-2 border-success/30 bg-success/5 hover:shadow-lg transition-all duration-200"
                     >
-                      {/* Activity Image */}
                       {activity.activityImage && (
                         <div className="relative h-48 overflow-hidden bg-cardbackground">
                           <Image
@@ -212,19 +200,14 @@ export default function PackageDetailPage() {
                           </div>
                         </div>
                       )}
-
-                      {/* Activity Info */}
                       <div className="p-5">
                         <h3 className="font-bold text-lg text-foreground mb-2">{activity.name}</h3>
                         <p className="text-sm text-muted mb-3 line-clamp-3">{activity.description}</p>
-                        
                         {activity.location && (
                           <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1">
                             📍 {activity.location}
                           </p>
                         )}
-
-                        {/* Category Badge */}
                         {activity.category && (
                           <div className="inline-block bg-success/20 text-success px-3 py-1 rounded-full text-xs font-semibold">
                             {activity.category}
@@ -234,8 +217,6 @@ export default function PackageDetailPage() {
                     </motion.div>
                   ))}
                 </div>
-
-                {/* Add More Activities Button */}
                 {availableActivities.length > 0 && (
                   <motion.button
                     onClick={() => setShowAddActivities(!showAddActivities)}
@@ -284,7 +265,6 @@ export default function PackageDetailPage() {
                               }
                             }}
                           >
-                            {/* Activity Image */}
                             {activity.activityImage && (
                               <div className="relative h-48 overflow-hidden">
                                 <Image
@@ -300,17 +280,12 @@ export default function PackageDetailPage() {
                                 )}
                               </div>
                             )}
-
-                            {/* Activity Info */}
                             <div className="p-4">
                               <h4 className="font-bold text-foreground mb-2">{activity.name}</h4>
                               <p className="text-sm text-muted mb-3 line-clamp-2">{activity.description}</p>
-                              
                               {activity.location && (
                                 <p className="text-xs text-muted-foreground mb-3">📍 {activity.location}</p>
                               )}
-
-                              {/* Price */}
                               <div className="flex items-center justify-between pt-3 border-t border-border">
                                 <span className="font-bold text-primary">
                                   {formatPrice(
@@ -381,7 +356,7 @@ export default function PackageDetailPage() {
               </motion.div>
             )}
 
-            {/* Inclusions */}
+            {/* Inclusions — non-Stag packages */}
             {inclusionItems.length > 0 && !isStagPackage && (
               <div>
                 <h2 className="text-3xl font-bold text-foreground mb-6">What's Included</h2>
@@ -411,6 +386,7 @@ export default function PackageDetailPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="lg:col-span-1"
           >
+            {/* Price & Details Card */}
             <div className="sticky top-24 bg-gradient-to-br from-primary to-secondary rounded-xl p-8 text-white shadow-2xl">
               {/* Price */}
               <div className="mb-8">
@@ -423,7 +399,7 @@ export default function PackageDetailPage() {
                 <p className="text-white/80 text-sm mt-2">per person</p>
                 {selectedActivitiesData.length > 0 && (
                   <p className="text-white/70 text-xs mt-2">
-                    Base: {formatPrice(convertPrice(basePrice, selectedCurrency), selectedCurrency)} + 
+                    Base: {formatPrice(convertPrice(basePrice, selectedCurrency), selectedCurrency)} +
                     Activities: {formatPrice(convertPrice(additionalPrice, selectedCurrency), selectedCurrency)}
                   </p>
                 )}
@@ -460,7 +436,7 @@ export default function PackageDetailPage() {
                 )}
               </div>
 
-              {/* CTA Buttons */}
+              {/* CTA */}
               <div className="space-y-3">
                 <Link
                   to={`/packages/${id}/customize`}
@@ -469,13 +445,22 @@ export default function PackageDetailPage() {
                   Customize Package
                 </Link>
               </div>
-              
 
               {/* Trust Badge */}
               <div className="mt-8 pt-8 border-t border-white/20 text-center">
                 <p className="text-white/80 text-sm">✓ Trusted by 10,000+ travelers</p>
               </div>
             </div>
+
+            {/* Booking Quote Form — below the price card */}
+            <div className="mt-6">
+              <BookingQuoteForm
+                packageName={pkg.packageName || ''}
+                packageId={pkg._id || ''}
+                basePrice={pkg.price || 0}
+              />
+            </div>
+
           </motion.div>
         </div>
       </section>
@@ -498,14 +483,6 @@ export default function PackageDetailPage() {
             >
               View All Packages
             </Link>
-            {/* Booking Quote Form — sits below the sidebar card */}
-            <div className="mt-6">
-              <BookingQuoteForm
-                packageName={pkg.packageName || ''}
-                packageId={pkg._id || ''}
-                basePrice={pkg.price || 0}
-              />
-            </div>
           </motion.div>
         </div>
       </section>
