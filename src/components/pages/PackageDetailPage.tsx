@@ -498,6 +498,14 @@ export default function PackageDetailPage() {
             >
               View All Packages
             </Link>
+            {/* Booking Quote Form — sits below the sidebar card */}
+            <div className="mt-6">
+              <BookingQuoteForm
+                packageName={pkg.packageName || ''}
+                packageId={pkg._id || ''}
+                basePrice={pkg.price || 0}
+              />
+            </div>
           </motion.div>
         </div>
       </section>
