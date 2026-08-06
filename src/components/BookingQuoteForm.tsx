@@ -4,48 +4,68 @@ import { Users, Plane, Hotel, Calendar, Shield, UserCheck, ChevronRight, Chevron
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { FEES, ADD_ONS } from './PACKAGES_DATA';
 
 // ============================================================
 // BALI FLOCK TOURS — BOOKING QUOTE FORM
-// Paste this component into your PackageDetailPage or 
-// PackageCustomizerPage to replace the existing form.
 // ============================================================
+
+// Inline constants — no external import needed
+const FEES = {
+  baliEntryFee: 100,
+  depositPerPerson: 1000,
+  fullPaymentWeeksBefore: 6,
+};
+
+const ADD_ONS = [
+  {
+    id: 'scooter-small',
+    name: 'Scooter Hire (Small)',
+    description: 'Small scooter hire for exploring Bali at your own pace.',
+    note: 'Price per day, per scooter — included in your quote',
+  },
+  {
+    id: 'scooter-large',
+    name: 'Scooter Hire (Large)',
+    description: 'Large scooter hire for those who want a bit more power.',
+    note: 'Price per day, per scooter — included in your quote',
+  },
+  {
+    id: 'tattoo',
+    name: 'Tattoo Studio',
+    description: 'Book a session at our partner tattoo studio in Bali.',
+    note: 'Price varies by design — we will include in your quote',
+  },
+];
+
+const NOTIFICATION_EMAIL = 'raghavaggarwal2005@gmail.com';
 
 interface BookingQuoteFormProps {
   packageName: string;
   packageId: string;
-  basePrice: number; // per person in NZD
+  basePrice: number;
   onSubmit?: (data: QuoteFormData) => void;
 }
 
 export interface QuoteFormData {
-  // Contact
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   country: string;
-  // Trip details
   numberOfPeople: number;
   arrivalDate: string;
   departureDate: string;
-  // Options
   flightsIncluded: boolean | null;
   accommodationType: string;
   accommodationTier: string;
   securityRequired: boolean | null;
   tourGuideRequired: boolean | null;
-  // Children (family package)
   hasChildren: boolean;
   numberOfChildren: number;
   childCareDates: string;
-  // Add-ons
   selectedAddOns: string[];
-  // Notes
   specialRequests: string;
   dietaryRestrictions: string;
-  // Calculated
   baliEntryFeeTotal: number;
   estimatedTotal: number;
 }
@@ -57,8 +77,6 @@ const STEPS = [
   { id: 4, label: 'Add-Ons', icon: Shield },
   { id: 5, label: 'Review', icon: CheckCircle2 },
 ];
-
-const NOTIFICATION_EMAIL = 'raghavaggarwal2005@gmail.com';
 
 export default function BookingQuoteForm({ packageName, packageId, basePrice, onSubmit }: BookingQuoteFormProps) {
   const [step, setStep] = useState(1);
@@ -93,7 +111,6 @@ export default function BookingQuoteForm({ packageName, packageId, basePrice, on
   const update = (field: keyof QuoteFormData, value: any) => {
     setForm(prev => {
       const updated = { ...prev, [field]: value };
-      // Recalculate entry fee when people count changes
       if (field === 'numberOfPeople') {
         updated.baliEntryFeeTotal = FEES.baliEntryFee * value;
       }
@@ -113,56 +130,45 @@ export default function BookingQuoteForm({ packageName, packageId, basePrice, on
     return `
 NEW BOOKING QUOTE REQUEST — BALI FLOCK TOURS
 ============================================
-
 PACKAGE: ${packageName}
 Package ID: ${packageId}
 
 CONTACT DETAILS
----------------
 Name: ${form.firstName} ${form.lastName}
 Email: ${form.email}
 Phone: ${form.phone}
 Country: ${form.country}
 
 TRIP DETAILS
-------------
 Number of People: ${form.numberOfPeople}
 Arrival Date: ${form.arrivalDate || 'TBC'}
 Departure Date: ${form.departureDate || 'TBC'}
 Flights Included: ${form.flightsIncluded === true ? 'YES — needs flights arranged' : form.flightsIncluded === false ? 'NO — self-arranged' : 'Not specified'}
 
 ACCOMMODATION
--------------
 Type: ${form.accommodationType || 'Not specified'}
-Tier: ${form.accommodationTier || 'Not specified'}
 Note: ${isLargeGroup ? 'Large group (20+) — Windom Hotel' : 'Small group (under 20) — Villa/Airbnb'}
 
 OPTIONAL SERVICES
------------------
 Security (NZ Licensed): ${form.securityRequired === true ? 'YES REQUESTED' : form.securityRequired === false ? 'No' : 'Not specified'}
 NZ Tour Guide: ${form.tourGuideRequired === true ? 'YES REQUESTED' : form.tourGuideRequired === false ? 'No' : 'Not specified'}
 
 ${isFamilyPackage && form.hasChildren ? `CHILDREN
---------
 Number of Children: ${form.numberOfChildren}
 Child Care Dates/Hours: ${form.childCareDates}
-
-` : ''}ADD-ONS REQUESTED
------------------
+` : ''}
+ADD-ONS REQUESTED
 ${form.selectedAddOns.length > 0 ? addOnDetails : 'None'}
 
-FEES TO INCLUDE IN QUOTE
--------------------------
-Bali Entry Fee (visa + levy): $${FEES.baliEntryFee} NZD x ${form.numberOfPeople} people = $${form.baliEntryFeeTotal} NZD
-Deposit Required: $${FEES.depositPerPerson} NZD per person (non-refundable, non-transferable)
+FEES
+Bali Entry Fee: $${FEES.baliEntryFee} NZD x ${form.numberOfPeople} people = $${form.baliEntryFeeTotal} NZD
+Deposit Required: $${FEES.depositPerPerson} NZD per person (non-refundable)
 Full Payment Due: 6 weeks before departure
 
-ADDITIONAL NOTES
-----------------
+NOTES
 Dietary Restrictions: ${form.dietaryRestrictions || 'None'}
 Special Requests: ${form.specialRequests || 'None'}
 
-============================================
 Submitted: ${new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland' })}
 Reply to: ${form.email}
 ============================================
@@ -172,62 +178,9 @@ Reply to: ${form.email}
   const handleSubmit = async () => {
     setSubmitting(true);
     setError('');
-
     try {
-      // Send email via Wix Email API
-      // This uses Wix's built-in triggered emails or you can use fetch to a Wix backend function
-      // Replace the URL below with your Wix backend function URL once set up
-      
       const emailBody = generateEmailBody();
-
-      // Option 1: Use Wix HTTP Functions (recommended)
-      // Create a file at backend/sendQuoteEmail.web.js and point to it here
-      // const response = await fetch('/_functions/sendQuoteEmail', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     to: NOTIFICATION_EMAIL,
-      //     replyTo: form.email,
-      //     subject: `New Quote Request: ${packageName} — ${form.firstName} ${form.lastName} (${form.numberOfPeople} people)`,
-      //     body: emailBody,
-      //   }),
-      // });
-
-      // Option 2: Use Wix CMS to save the quote (works RIGHT NOW without backend setup)
-      // The quote will appear in your Wix CMS dashboard under "quotes" collection
-      const quoteRecord = {
-        _id: crypto.randomUUID(),
-        packageId,
-        packageName,
-        contactName: `${form.firstName} ${form.lastName}`,
-        contactEmail: form.email,
-        contactPhone: form.phone,
-        contactCountry: form.country,
-        numberOfPeople: form.numberOfPeople,
-        arrivalDate: form.arrivalDate,
-        departureDate: form.departureDate,
-        flightsIncluded: form.flightsIncluded,
-        accommodationType: form.accommodationType,
-        securityRequired: form.securityRequired,
-        tourGuideRequired: form.tourGuideRequired,
-        selectedAddOns: JSON.stringify(form.selectedAddOns),
-        specialRequests: form.specialRequests,
-        dietaryRestrictions: form.dietaryRestrictions,
-        baliEntryFeeTotal: form.baliEntryFeeTotal,
-        status: 'pending',
-        submittedAt: new Date().toISOString(),
-        emailBody, // Full email body for you to copy/forward
-      };
-
-      // Import BaseCrudService at the top of your file:
-      // import { BaseCrudService } from '@/integrations';
-      // Then uncomment:
-      // await BaseCrudService.create('quotes', quoteRecord);
-
-      // For now, log to console so you can see it working
-      console.log('QUOTE SUBMITTED:', quoteRecord);
-      console.log('\nEMAIL TO SEND:\n', emailBody);
-
+      console.log('QUOTE SUBMITTED — EMAIL BODY:\n', emailBody);
       setSubmitted(true);
       if (onSubmit) onSubmit(form);
     } catch (err) {
@@ -265,9 +218,9 @@ Reply to: ${form.email}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-left mb-6">
           <h3 className="font-bold text-amber-900 mb-3">What happens next?</h3>
           <ol className="space-y-2 text-amber-800 text-sm">
-            <li className="flex gap-2"><span className="font-bold">1.</span> We review your request and calculate your full quote (including flights & accommodation if selected)</li>
+            <li className="flex gap-2"><span className="font-bold">1.</span> We review your request and calculate your full quote</li>
             <li className="flex gap-2"><span className="font-bold">2.</span> We email your personalised quote within 24 hours</li>
-            <li className="flex gap-2"><span className="font-bold">3.</span> Reply to confirm — we'll send you a deposit payment link ($1,000 NZD per person)</li>
+            <li className="flex gap-2"><span className="font-bold">3.</span> Reply to confirm — we'll send a deposit payment link ($1,000 NZD per person)</li>
             <li className="flex gap-2"><span className="font-bold">4.</span> Full payment is due 6 weeks before your departure date</li>
           </ol>
         </div>
@@ -311,7 +264,7 @@ Reply to: ${form.email}
       <div className="p-6">
         <AnimatePresence mode="wait">
 
-          {/* STEP 1 — Contact Details */}
+          {/* STEP 1 — Contact */}
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
               <h3 className="text-lg font-bold text-foreground mb-4">Your Contact Details</h3>
@@ -398,26 +351,16 @@ Reply to: ${form.email}
                     <div className="space-y-3 pl-7">
                       <div>
                         <label className="block text-sm font-semibold mb-1">Number of Children</label>
-                        <Input
-                          type="number"
-                          min={1}
-                          value={form.numberOfChildren}
-                          onChange={e => update('numberOfChildren', parseInt(e.target.value))}
-                        />
+                        <Input type="number" min={1} value={form.numberOfChildren} onChange={e => update('numberOfChildren', parseInt(e.target.value))} />
                       </div>
                       <div>
                         <label className="block text-sm font-semibold mb-1">Preferred child care hours (Day 3)</label>
-                        <Input
-                          placeholder="e.g. 10am – 6pm"
-                          value={form.childCareDates}
-                          onChange={e => update('childCareDates', e.target.value)}
-                        />
+                        <Input placeholder="e.g. 10am – 6pm" value={form.childCareDates} onChange={e => update('childCareDates', e.target.value)} />
                       </div>
                     </div>
                   )}
                 </div>
               )}
-              {/* Bali entry fee notice */}
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
                 <Info size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-amber-800">
@@ -432,12 +375,9 @@ Reply to: ${form.email}
           {step === 3 && (
             <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <h3 className="text-lg font-bold text-foreground mb-4">Trip Options</h3>
-
-              {/* Flights */}
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-3">
-                  <Plane size={16} className="inline mr-2" />
-                  Flights *
+                  <Plane size={16} className="inline mr-2" />Flights *
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
@@ -447,11 +387,7 @@ Reply to: ${form.email}
                     <button
                       key={String(opt.value)}
                       onClick={() => update('flightsIncluded', opt.value)}
-                      className={`p-4 rounded-xl border-2 text-left transition-all ${
-                        form.flightsIncluded === opt.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/40'
-                      }`}
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${form.flightsIncluded === opt.value ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'}`}
                     >
                       <p className="font-semibold text-sm text-foreground">{opt.label}</p>
                       <p className="text-xs text-muted mt-1">{opt.desc}</p>
@@ -459,12 +395,9 @@ Reply to: ${form.email}
                   ))}
                 </div>
               </div>
-
-              {/* Accommodation */}
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-3">
-                  <Hotel size={16} className="inline mr-2" />
-                  Accommodation *
+                  <Hotel size={16} className="inline mr-2" />Accommodation *
                 </label>
                 <div className="space-y-3">
                   {isLargeGroup ? (
@@ -474,15 +407,8 @@ Reply to: ${form.email}
                         { value: 'windom-ocean', label: 'Windom Hotel — Ocean View', desc: 'Per room, ocean-facing views' },
                         { value: 'windom-back', label: 'Windom Hotel — Back View', desc: 'Per room, garden-facing' },
                       ].map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => update('accommodationType', opt.value)}
-                          className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
-                            form.accommodationType === opt.value
-                              ? 'border-primary bg-primary/5'
-                              : 'border-border hover:border-primary/40'
-                          }`}
-                        >
+                        <button key={opt.value} onClick={() => update('accommodationType', opt.value)}
+                          className={`w-full p-4 rounded-xl border-2 text-left transition-all ${form.accommodationType === opt.value ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'}`}>
                           <p className="font-semibold text-sm">{opt.label}</p>
                           <p className="text-xs text-muted">{opt.desc}</p>
                         </button>
@@ -491,14 +417,8 @@ Reply to: ${form.email}
                   ) : (
                     <>
                       <p className="text-xs text-muted bg-green-50 p-3 rounded-lg">Under 20 people: Private villa sourced via Booking.com / Airbnb</p>
-                      <button
-                        onClick={() => update('accommodationType', 'villa')}
-                        className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
-                          form.accommodationType === 'villa'
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border hover:border-primary/40'
-                        }`}
-                      >
+                      <button onClick={() => update('accommodationType', 'villa')}
+                        className={`w-full p-4 rounded-xl border-2 text-left transition-all ${form.accommodationType === 'villa' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'}`}>
                         <p className="font-semibold text-sm">Private Villa</p>
                         <p className="text-xs text-muted">We'll source the best villa for your group size and budget</p>
                       </button>
@@ -506,65 +426,35 @@ Reply to: ${form.email}
                   )}
                 </div>
               </div>
-
-              {/* Security */}
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-3">
-                  <Shield size={16} className="inline mr-2" />
-                  NZ Licensed Security
+                  <Shield size={16} className="inline mr-2" />NZ Licensed Security
                 </label>
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-3">
-                  <p className="text-sm text-blue-800">
-                    A New Zealand licensed security guard dedicated to your group. Around-the-clock support, keeping your group safe and on schedule with a fun roll-call system.
-                  </p>
+                  <p className="text-sm text-blue-800">A New Zealand licensed security guard dedicated to your group. Around-the-clock support with a fun roll-call system.</p>
                   <p className="text-xs text-blue-700 mt-2 font-semibold">$100 NZD/day + $80 NZD accommodation/day + flights + $20 NZD food per diem</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { value: true, label: 'Yes please' },
-                    { value: false, label: 'No thanks' },
-                  ].map(opt => (
-                    <button
-                      key={String(opt.value)}
-                      onClick={() => update('securityRequired', opt.value)}
-                      className={`p-3 rounded-xl border-2 font-semibold text-sm transition-all ${
-                        form.securityRequired === opt.value
-                          ? 'border-primary bg-primary/5 text-primary'
-                          : 'border-border hover:border-primary/40 text-foreground'
-                      }`}
-                    >
+                  {[{ value: true, label: 'Yes please' }, { value: false, label: 'No thanks' }].map(opt => (
+                    <button key={String(opt.value)} onClick={() => update('securityRequired', opt.value)}
+                      className={`p-3 rounded-xl border-2 font-semibold text-sm transition-all ${form.securityRequired === opt.value ? 'border-primary bg-primary/5 text-primary' : 'border-border hover:border-primary/40 text-foreground'}`}>
                       {opt.label}
                     </button>
                   ))}
                 </div>
               </div>
-
-              {/* Tour Guide */}
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-3">
-                  <UserCheck size={16} className="inline mr-2" />
-                  NZ Tour Guide
+                  <UserCheck size={16} className="inline mr-2" />NZ Tour Guide
                 </label>
                 <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-3">
-                  <p className="text-sm text-purple-800">
-                    A NZ-based tour guide who keeps your group on the itinerary with a fun roll-call system — ensuring smooth flow and around-the-clock support throughout your holiday.
-                  </p>
+                  <p className="text-sm text-purple-800">A NZ-based tour guide keeping your group on itinerary with a fun roll-call system and around-the-clock support.</p>
                   <p className="text-xs text-purple-700 mt-2 font-semibold">$100 NZD/day + $80 NZD accommodation/day + flights + $20 NZD food per diem</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { value: true, label: 'Yes please' },
-                    { value: false, label: 'No thanks' },
-                  ].map(opt => (
-                    <button
-                      key={String(opt.value)}
-                      onClick={() => update('tourGuideRequired', opt.value)}
-                      className={`p-3 rounded-xl border-2 font-semibold text-sm transition-all ${
-                        form.tourGuideRequired === opt.value
-                          ? 'border-primary bg-primary/5 text-primary'
-                          : 'border-border hover:border-primary/40 text-foreground'
-                      }`}
-                    >
+                  {[{ value: true, label: 'Yes please' }, { value: false, label: 'No thanks' }].map(opt => (
+                    <button key={String(opt.value)} onClick={() => update('tourGuideRequired', opt.value)}
+                      className={`p-3 rounded-xl border-2 font-semibold text-sm transition-all ${form.tourGuideRequired === opt.value ? 'border-primary bg-primary/5 text-primary' : 'border-border hover:border-primary/40 text-foreground'}`}>
                       {opt.label}
                     </button>
                   ))}
@@ -573,28 +463,18 @@ Reply to: ${form.email}
             </motion.div>
           )}
 
-          {/* STEP 4 — Add-Ons & Notes */}
+          {/* STEP 4 — Add-Ons */}
           {step === 4 && (
             <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
               <h3 className="text-lg font-bold text-foreground mb-4">Add-Ons & Notes</h3>
-
               <div className="space-y-3">
-                {ADD_ONS.filter(a => !['security', 'tour-guide'].includes(a.id)).map(addOn => (
-                  <button
-                    key={addOn.id}
+                {ADD_ONS.map(addOn => (
+                  <button key={addOn.id}
                     onClick={() => {
                       const current = form.selectedAddOns;
-                      update('selectedAddOns',
-                        current.includes(addOn.id)
-                          ? current.filter(id => id !== addOn.id)
-                          : [...current, addOn.id]
-                      );
+                      update('selectedAddOns', current.includes(addOn.id) ? current.filter(id => id !== addOn.id) : [...current, addOn.id]);
                     }}
-                    className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
-                      form.selectedAddOns.includes(addOn.id)
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border hover:border-primary/40'
-                    }`}
+                    className={`w-full p-4 rounded-xl border-2 text-left transition-all ${form.selectedAddOns.includes(addOn.id) ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'}`}
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -602,46 +482,28 @@ Reply to: ${form.email}
                         <p className="text-xs text-muted mt-1">{addOn.description}</p>
                         <p className="text-xs text-primary font-semibold mt-1">{addOn.note}</p>
                       </div>
-                      <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 ml-4 flex items-center justify-center ${
-                        form.selectedAddOns.includes(addOn.id)
-                          ? 'border-primary bg-primary'
-                          : 'border-border'
-                      }`}>
-                        {form.selectedAddOns.includes(addOn.id) && (
-                          <CheckCircle2 size={12} className="text-white" />
-                        )}
+                      <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 ml-4 flex items-center justify-center ${form.selectedAddOns.includes(addOn.id) ? 'border-primary bg-primary' : 'border-border'}`}>
+                        {form.selectedAddOns.includes(addOn.id) && <CheckCircle2 size={12} className="text-white" />}
                       </div>
                     </div>
                   </button>
                 ))}
               </div>
-
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-1">Dietary Restrictions / Allergies</label>
-                <Textarea
-                  placeholder="e.g. vegetarian, gluten-free, nut allergy..."
-                  value={form.dietaryRestrictions}
-                  onChange={e => update('dietaryRestrictions', e.target.value)}
-                  rows={2}
-                />
+                <Textarea placeholder="e.g. vegetarian, gluten-free, nut allergy..." value={form.dietaryRestrictions} onChange={e => update('dietaryRestrictions', e.target.value)} rows={2} />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-foreground mb-1">Special Requests</label>
-                <Textarea
-                  placeholder="Anything else we should know about your group or trip?"
-                  value={form.specialRequests}
-                  onChange={e => update('specialRequests', e.target.value)}
-                  rows={3}
-                />
+                <Textarea placeholder="Anything else we should know about your group or trip?" value={form.specialRequests} onChange={e => update('specialRequests', e.target.value)} rows={3} />
               </div>
             </motion.div>
           )}
 
-          {/* STEP 5 — Review & Submit */}
+          {/* STEP 5 — Review */}
           {step === 5 && (
             <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
               <h3 className="text-lg font-bold text-foreground mb-4">Review Your Request</h3>
-
               <div className="space-y-3 text-sm">
                 {[
                   { label: 'Package', value: packageName },
@@ -663,18 +525,15 @@ Reply to: ${form.email}
                   </div>
                 ))}
               </div>
-
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
                 <p className="font-bold mb-2">Deposit & Payment Terms</p>
                 <p>• $1,000 NZD deposit per person — non-refundable, non-transferable</p>
                 <p>• Full payment due 6 weeks before departure</p>
                 <p>• We'll email you a deposit payment link once you confirm</p>
               </div>
-
               <div className="bg-gray-50 border border-border rounded-xl p-4 text-xs text-muted">
-                By submitting this quote request, you agree that Bali Flock Tours acts purely as a facilitator and organiser of travel experiences. Please review our full Terms & Conditions before confirming your booking.
+                By submitting this quote request, you agree that Bali Flock Tours acts purely as a facilitator. Please review our full Terms & Conditions before confirming your booking.
               </div>
-
               {error && (
                 <div className="flex items-center gap-2 text-red-700 bg-red-50 p-3 rounded-lg text-sm">
                   <AlertCircle size={16} />
@@ -693,21 +552,12 @@ Reply to: ${form.email}
               <ChevronLeft size={16} className="mr-1" /> Back
             </Button>
           ) : <div />}
-
           {step < 5 ? (
-            <Button
-              onClick={() => setStep(s => s + 1)}
-              disabled={!canProceed()}
-              className="bg-primary hover:bg-primary/90 text-white font-bold px-6"
-            >
+            <Button onClick={() => setStep(s => s + 1)} disabled={!canProceed()} className="bg-primary hover:bg-primary/90 text-white font-bold px-6">
               Continue <ChevronRight size={16} className="ml-1" />
             </Button>
           ) : (
-            <Button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="bg-primary hover:bg-primary/90 text-white font-bold px-8"
-            >
+            <Button onClick={handleSubmit} disabled={submitting} className="bg-primary hover:bg-primary/90 text-white font-bold px-8">
               {submitting ? 'Sending...' : 'Submit Quote Request'}
             </Button>
           )}
