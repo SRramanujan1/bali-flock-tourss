@@ -13,6 +13,7 @@ import AboutPage from '@/components/pages/AboutPage';
 import AdminPage from '@/components/pages/AdminPage';
 import TermsPage from '@/components/pages/TermsPage';
 import FAQPage from '@/components/pages/FAQPage';
+import ContactPage from '@/components/pages/ContactPage';
 
 function Layout() {
   return (
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "faq",
         element: <FAQPage />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
       },
       {
         path: "*",
