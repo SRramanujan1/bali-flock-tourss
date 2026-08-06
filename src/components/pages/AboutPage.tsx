@@ -1,213 +1,189 @@
 import { motion } from 'framer-motion';
-import { Heart, Globe, Users, Award } from 'lucide-react';
-import { Image } from '@/components/ui/image';
+import { Link } from 'react-router-dom';
+import { Shield, Users, Clock, Heart, ArrowRight, CheckCircle2 } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+// ============================================================
+// BALI FLOCK TOURS — ABOUT PAGE (updated — no fake names)
+// Replace your existing src/pages/AboutPage.tsx with this
+// ============================================================
 
 export default function AboutPage() {
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    whileInView: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 },
-    viewport: { once: true }
-  };
-
   const values = [
     {
-      icon: Heart,
-      title: 'Passion for Travel',
-      description: 'We believe every journey should be unforgettable and filled with authentic experiences.'
+      icon: Shield,
+      title: 'Safety First',
+      description: 'Every trip is designed with your safety as the priority. NZ-licensed security available on request, local vetted operators, and support throughout your trip.'
     },
     {
-      icon: Globe,
-      title: 'Global Expertise',
-      description: 'With years of experience across multiple destinations, we know how to craft perfect itineraries.'
+      icon: Heart,
+      title: 'Passion for Bali',
+      description: 'We love Bali and we know it inside out. That\'s why every package is built from personal experience — not a generic template.'
     },
     {
       icon: Users,
-      title: 'Community First',
-      description: 'We prioritize creating meaningful connections between travelers and local cultures.'
+      title: 'Group Specialists',
+      description: 'From a couple to 50+ people — we\'ve done it all. We know what makes group travel work and what can go wrong, and we plan around both.'
     },
     {
-      icon: Award,
-      title: 'Quality Assured',
-      description: 'Every package is carefully curated to ensure the highest standards of service and satisfaction.'
-    }
+      icon: Clock,
+      title: 'Stress-Free Guarantee',
+      description: 'From the moment you land to the moment you leave, we handle the logistics. You just focus on having the time of your life.'
+    },
   ];
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
-        <div className="max-w-[100rem] mx-auto px-6 py-4">
-          <h1 className="text-3xl font-bold text-gray-900">About Bali Flock</h1>
+      <Header />
+
+      {/* Hero */}
+      <section className="relative bg-gray-900 py-24 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=80"
+          alt="Bali"
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        />
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <h1 className="text-5xl md:text-6xl font-black text-white mb-6">Many Wings,<br />One Journey</h1>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Bali Flock Tours is a NZ-based travel specialist that organises safe, supported, and unforgettable group experiences in Bali, Indonesia.
+            </p>
+          </motion.div>
         </div>
-      </header>
+      </section>
 
-      <main className="max-w-[100rem] mx-auto px-6 py-16">
-        {/* Hero Section */}
-        <motion.section 
-          className="mb-20"
-          {...fadeInUp}
+      {/* Story */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="grid md:grid-cols-2 gap-12 items-center"
         >
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-5xl font-bold text-gray-900 mb-6">
-                Discover Your Next Adventure
-              </h2>
-              <p className="text-xl text-gray-600 mb-6 leading-relaxed">
-                Bali Flock is your gateway to extraordinary travel experiences. We specialize in crafting personalized holiday packages that go beyond the ordinary, connecting you with the heart and soul of Bali and beyond.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Founded with a passion for authentic travel, we believe that the best journeys are those that create lasting memories and meaningful connections with the places and people you visit.
-              </p>
-            </div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <Image 
-                src="https://static.wixstatic.com/media/b57044_d20c708aa6ec4cdb9d761e228ad676a8~mv2.png?originWidth=448&originHeight=384"
-                alt="Bali landscape with tropical scenery"
-                width={500}
-                height={400}
-                className="rounded-lg shadow-lg"
-              />
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* Mission & Vision */}
-        <motion.section 
-          className="mb-20 grid md:grid-cols-2 gap-12"
-          {...fadeInUp}
-        >
-          <div className="bg-gradient-to-br from-pink-50 to-purple-50 p-8 rounded-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
-            <p className="text-gray-700 leading-relaxed">
-              To create transformative travel experiences that inspire, educate, and connect people with the beauty and culture of Bali. We're committed to sustainable tourism practices that benefit both travelers and local communities.
+          <div>
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Our Story</p>
+            <h2 className="text-4xl font-black text-gray-900 mb-6">Born from a love of Bali</h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              Bali Flock Tours was born out of a simple frustration — organising group travel is hard. Between flights, accommodation, activities, and keeping everyone happy, it becomes a full-time job before you've even left home.
+            </p>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              We built Bali Flock Tours to solve that. We take care of everything — from your first quote to your airport drop-off at the end — so your group can focus on what actually matters: having an incredible time.
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              Based in New Zealand, we specialise in Bali because we know it better than anywhere. We've been there, lived the experiences, and built relationships with trusted local partners who share our standards.
             </p>
           </div>
-          <div className="bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
-            <p className="text-gray-700 leading-relaxed">
-              To be the most trusted travel partner for those seeking authentic, personalized experiences. We envision a world where travel brings people together and creates positive impact on the destinations we serve.
-            </p>
+          <div>
+            <img
+              src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80"
+              alt="Bali landscape"
+              className="rounded-2xl shadow-xl w-full h-80 object-cover"
+            />
           </div>
-        </motion.section>
+        </motion.div>
+      </section>
 
-        {/* Core Values */}
-        <motion.section 
-          className="mb-20"
-          {...fadeInUp}
-        >
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">Our Core Values</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Values */}
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-[100rem] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">What We Stand For</p>
+            <h2 className="text-4xl font-black text-gray-900">Our Values</h2>
+          </motion.div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, index) => {
               const Icon = value.icon;
               return (
                 <motion.div
                   key={index}
-                  className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
+                  className="bg-white p-7 rounded-2xl shadow-sm"
                 >
-                  <Icon className="w-12 h-12 text-purple-600 mb-4" />
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                  <p className="text-gray-600">{value.description}</p>
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                    <Icon size={24} className="text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{value.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{value.description}</p>
                 </motion.div>
               );
             })}
           </div>
-        </motion.section>
+        </div>
+      </section>
 
-        {/* Team Section */}
-        <motion.section 
-          className="mb-20 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-lg p-12 text-white"
-          {...fadeInUp}
+      {/* Why Choose */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-bold mb-6">Meet Our Team</h2>
-          <p className="text-lg text-white/80 mb-8 max-w-2xl">
-            Our dedicated team of travel experts, local guides, and customer service professionals are passionate about making your Bali experience unforgettable. With years of combined experience in the travel industry, we're here to turn your travel dreams into reality.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
+          <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Why Bali Flock</p>
+          <h2 className="text-4xl font-black text-gray-900 mb-10">What makes us different</h2>
+          <div className="grid md:grid-cols-2 gap-4">
             {[
-              { name: 'Sarah Johnson', role: 'Founder & Travel Expert', bio: '15+ years in luxury travel' },
-              { name: 'Budi Santoso', role: 'Local Guide Coordinator', bio: 'Bali native with deep cultural knowledge' },
-              { name: 'Emma Chen', role: 'Customer Experience Manager', bio: 'Dedicated to your satisfaction' }
-            ].map((member, index) => (
-              <motion.div
-                key={index}
-                className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-                <p className="text-pink-300 font-semibold mb-2">{member.role}</p>
-                <p className="text-white/70">{member.bio}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Why Choose Us */}
-        <motion.section 
-          className="mb-20"
-          {...fadeInUp}
-        >
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">Why Choose Bali Flock?</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              { title: 'Personalized Itineraries', desc: 'Every package is tailored to your preferences and interests.' },
-              { title: '24/7 Support', desc: 'Our team is always available to assist you before, during, and after your trip.' },
-              { title: 'Local Expertise', desc: 'We work with trusted local partners to ensure authentic experiences.' },
-              { title: 'Best Value', desc: 'Competitive pricing without compromising on quality and service.' },
-              { title: 'Flexible Packages', desc: 'Customize your adventure with our flexible booking options.' },
-              { title: 'Sustainable Tourism', desc: 'We prioritize eco-friendly practices and community support.' }
+              'NZ-based and operated — we\'re locals you can actually talk to',
+              'Personalised quotes within 24 hours',
+              '$1,000 NZD deposit to lock in your trip — pay the rest 6 weeks before',
+              'All transport included — airport to airport',
+              'Breakfast & lunch on every activity day',
+              'NZ-licensed security and tour guide available',
+              'Trusted local Bali partners only',
+              'Customise any package to suit your group',
+              'Full Terms & Conditions and facilitator contract',
+              'One point of contact from booking to departure',
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="flex gap-4"
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
                 viewport={{ once: true }}
+                className="flex items-start gap-3"
               >
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-600 text-white">
-                    <span className="text-xl font-bold">✓</span>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-gray-600">{item.desc}</p>
-                </div>
+                <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-0.5" />
+                <span className="text-gray-600 text-sm">{item}</span>
               </motion.div>
             ))}
           </div>
-        </motion.section>
+        </motion.div>
+      </section>
 
-        {/* CTA Section */}
-        <motion.section 
-          className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg p-12 text-white text-center"
-          {...fadeInUp}
-        >
-          <h2 className="text-4xl font-bold mb-6">Ready to Start Your Journey?</h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Explore our curated packages and discover the perfect Bali experience for you.
-          </p>
-          <a
-            href="/packages"
-            className="inline-block bg-white text-purple-600 font-bold px-8 py-4 rounded-full hover:bg-gray-100 transition-colors"
+      {/* CTA */}
+      <section className="bg-gradient-to-r from-primary to-secondary py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
-            Explore Packages
-          </a>
-        </motion.section>
-      </main>
+            <h2 className="text-4xl font-black text-white mb-4">Ready to Book?</h2>
+            <p className="text-white/80 text-lg mb-8">Browse our packages and get your quote within 24 hours.</p>
+            <Link
+              to="/packages"
+              className="inline-flex items-center gap-2 bg-white text-primary font-black px-10 py-4 rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105"
+            >
+              View Packages <ArrowRight size={20} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

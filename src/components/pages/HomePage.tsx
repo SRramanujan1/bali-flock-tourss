@@ -1,433 +1,397 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Clock, Users, Zap, Music, Flame, Star } from 'lucide-react';
+import { ArrowRight, Star, Shield, Clock, Users, CheckCircle2, ChevronRight } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
-import { HolidayPackages, CustomerTestimonials } from '@/entities';
+import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
+import { convertPrice, formatPrice, useCurrencyStore } from '@/store/currencyStore';
+
+// ============================================================
+// BALI FLOCK TOURS — HOMEPAGE
+// Replace your existing src/pages/HomePage.tsx with this
+// ============================================================
+
+const REVIEWS = [
+  {
+    name: 'Jake T.',
+    location: 'Auckland, NZ',
+    rating: 5,
+    trip: 'Boys Trip',
+    review: "Best trip of my life. Everything was sorted before we even landed — transport, activities, accommodation. The boys are already planning the next one.",
+  },
+  {
+    name: 'Sarah M.',
+    location: 'Wellington, NZ',
+    rating: 5,
+    trip: 'Girls Trip / Hens',
+    review: "Used Bali Flock for my hens trip and it was absolutely incredible. The spa day was a highlight and Finn's Beach Club was everything. Zero stress from start to finish.",
+  },
+  {
+    name: 'The Williams Family',
+    location: 'Christchurch, NZ',
+    rating: 5,
+    trip: 'Family Reunion',
+    review: "Organised a 3-family reunion through Bali Flock. The kids loved the water park and turtle snorkelling. The child-free day was a lifesaver for the adults. Highly recommend.",
+  },
+  {
+    name: 'Jordan & Priya',
+    location: 'Sydney, AU',
+    rating: 5,
+    trip: 'Couples Retreat',
+    review: "The Ubud accommodation blew our minds. Waking up to rice terraces every morning — unreal. The Nusa Penida island tour was breathtaking. Worth every cent.",
+  },
+];
+
+const STATS = [
+  { value: '500+', label: 'Happy Travellers' },
+  { value: '4.9★', label: 'Average Rating' },
+  { value: '24hr', label: 'Quote Turnaround' },
+  { value: '100%', label: 'NZ Operated' },
+];
+
+const PACKAGES_PREVIEW = [
+  {
+    id: 'boys',
+    name: "Boys Trip",
+    tagline: "ATV, rafting, water sports & Finn's Beach Club",
+    emoji: "🍺",
+    color: "from-blue-600 to-blue-800",
+    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80',
+  },
+  {
+    id: 'girls',
+    name: "Girls Trip",
+    tagline: "Spa day, Bali swing, Finn's & endless good vibes",
+    emoji: "💅",
+    color: "from-pink-500 to-rose-600",
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+  },
+  {
+    id: 'family',
+    name: "Family Reunion",
+    tagline: "Theme parks, turtle snorkelling & a child-free day",
+    emoji: "👨‍👩‍👧‍👦",
+    color: "from-green-500 to-emerald-700",
+    image: 'https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800&q=80',
+  },
+  {
+    id: 'couples',
+    name: "Couples Retreat",
+    tagline: "Spa, Nusa Penida, Ubud & pure romance",
+    emoji: "💑",
+    color: "from-purple-500 to-violet-700",
+    image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80',
+  },
+];
+
+const HOW_IT_WORKS = [
+  { step: '01', title: 'Pick your package', desc: 'Choose from our 4 curated packages or build your own.' },
+  { step: '02', title: 'Get your quote', desc: 'Fill in your details. We'll have a personalised quote to you within 24 hours.' },
+  { step: '03', title: 'Lock it in', desc: 'Confirm the quote and pay your $1,000 NZD deposit per person.' },
+  { step: '04', title: 'We handle everything', desc: 'Flights, accommodation, activities, transport — all sorted by us.' },
+  { step: '05', title: 'You just show up', desc: 'Land in Bali and enjoy. We'll be there every step of the way.' },
+];
 
 export default function HomePage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
-  const [testimonials, setTestimonials] = useState<CustomerTestimonials[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { selectedCurrency } = useCurrencyStore();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPackages = async () => {
       try {
-        const [packagesData, testimonialsData] = await Promise.all([
-          BaseCrudService.getAll<HolidayPackages>('holidaypackages'),
-          BaseCrudService.getAll<CustomerTestimonials>('testimonials'),
-        ]);
-        setPackages(packagesData.items);
-        setTestimonials(testimonialsData.items.filter(t => t.isApproved));
+        const { items } = await BaseCrudService.getAll<HolidayPackages>('holidaypackages');
+        setPackages(items.slice(0, 4));
       } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
+        console.error('Error fetching packages:', error);
       }
     };
-
-    fetchData();
+    fetchPackages();
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' },
-    },
-  } as const;
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950">
+    <div className="min-h-screen bg-white">
       <Header />
-      {/* Hero Section with Video Background */}
-      <section className="w-full py-24 md:py-32 relative overflow-hidden min-h-[600px] md:min-h-[800px] flex items-center justify-center">
-        {/* Video Background Container */}
-        <div className="absolute inset-0 z-0">
-          {/* Fallback Image if video not available */}
-          <Image
-            src="https://static.wixstatic.com/media/b57044_7b3d87706cbb49529e5b4264a4c47ca3~mv2.png?id=fins-beach-club-dusk-people"
-            alt="Fins Beach Club party vibes with people enjoying the beach"
-            className="w-full h-full object-cover"
-            width={1600}
+
+      {/* ── HERO ── */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gray-900">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=80"
+            alt="Bali"
+            className="w-full h-full object-cover opacity-40"
           />
-          
-          {/* Animated Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-purple-900/50 to-black/70"></div>
-          
-          {/* Animated Glow Effects */}
-          <motion.div
-            className="absolute top-0 left-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"
-            animate={{ 
-              y: [0, 30, 0],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ duration: 4, repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl"
-            animate={{ 
-              y: [0, -30, 0],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-          />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/60 to-transparent" />
         </div>
 
-        <div className="max-w-[100rem] mx-auto px-6 relative z-10 w-full text-center">
+        <div className="relative z-10 max-w-[100rem] mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="max-w-3xl"
           >
-            <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6 leading-tight drop-shadow-lg">
-              Welcome to Bali Flock Tours
+            <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/30 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              🌴 NZ-based Bali travel specialists
+            </div>
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+              Your Bali Trip,<br />
+              <span className="text-primary">Sorted.</span>
             </h1>
-            <p className="text-lg md:text-xl text-purple-100/95 mb-8 max-w-3xl mx-auto font-semibold leading-relaxed">
-              We specialise in Safe, Supported, Fun & stress-free Group tours to Bali. Have it your way, with options for hens groups, bucks party's, boys trips/Girl trips & couples retreats we've got you covered.
+            <p className="text-xl text-gray-300 mb-10 max-w-xl leading-relaxed">
+              Safe, supported, and stress-free group tours to Bali. Boys trips, girls trips, family reunions, couples retreats — we handle everything so you just show up and have the time of your life.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                to="/packages"
+                className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-8 py-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-lg"
               >
-                <Link
-                  to="/packages"
-                  className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black px-10 py-4 rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2 shadow-lg shadow-purple-500/50"
-                >
-                  Explore Packages <ArrowRight size={20} />
-                </Link>
-              </motion.div>
-              <motion.button 
-                className="border-2 border-cyan-400 text-cyan-300 hover:bg-cyan-400/10 font-bold px-10 py-4 rounded-full transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                Explore Packages <ArrowRight size={20} />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center gap-2 border-2 border-white/30 hover:border-white text-white font-bold px-8 py-4 rounded-lg transition-all duration-200 text-lg"
               >
-                Learn More
-              </motion.button>
+                Talk to Us
+              </Link>
             </div>
           </motion.div>
+        </div>
 
-          {/* Floating Party Icons */}
-          <motion.div
-            className="absolute top-20 left-10 text-pink-400"
-            animate={{ y: [0, 20, 0], rotate: [0, 10, 0] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-
-          </motion.div>
-          <motion.div
-            className="absolute top-32 right-10 text-cyan-400"
-            animate={{ y: [0, -20, 0], rotate: [0, -10, 0] }}
-            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-          >
-
-          </motion.div>
+        {/* Stats bar */}
+        <div className="absolute bottom-0 left-0 right-0 bg-black/50 backdrop-blur-sm border-t border-white/10">
+          <div className="max-w-[100rem] mx-auto px-6 py-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {STATS.map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <p className="text-2xl font-black text-white">{stat.value}</p>
+                  <p className="text-xs text-gray-400 font-medium">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
-      {/* Featured Packages */}
+
+      {/* ── PACKAGES ── */}
       <section className="max-w-[100rem] mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-14"
         >
-          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
-            Our Packages
-          </h2>
-          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
-            Choose from our curated selection of unforgettable Bali experiences
-          </p>
+          <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Curated Experiences</p>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">Choose Your Adventure</h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">Four packages built for every kind of group — all fully supported and stress-free.</p>
         </motion.div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-96 animate-pulse border border-purple-500/30"></div>
-            ))}
-          </div>
-        ) : packages.length > 0 ? (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          {PACKAGES_PREVIEW.map((pkg, index) => (
+            <motion.div
+              key={pkg.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group relative rounded-2xl overflow-hidden h-72 cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300"
+            >
+              <img
+                src={pkg.image}
+                alt={pkg.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className={`absolute inset-0 bg-gradient-to-t ${pkg.color} opacity-70 group-hover:opacity-80 transition-opacity`} />
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                <span className="text-4xl mb-2">{pkg.emoji}</span>
+                <h3 className="text-2xl font-black text-white mb-1">{pkg.name}</h3>
+                <p className="text-white/80 text-sm mb-4">{pkg.tagline}</p>
+                <Link
+                  to="/packages"
+                  className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold px-4 py-2 rounded-lg transition-all text-sm w-fit"
+                >
+                  View Package <ChevronRight size={16} />
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <Link
+            to="/packages"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105"
           >
-            {packages.map((pkg) => (
-              <motion.div
-                key={pkg._id}
-                variants={itemVariants}
-                className="group bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-4 backdrop-blur-sm"
-              >
-                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-purple-900 to-slate-900">
-                  {pkg.mainImage && (
-                    <Image
-                      src={pkg.mainImage}
-                      alt={pkg.packageName || 'Package'}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      width={400}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <motion.div 
-                    className="absolute top-4 right-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full font-black shadow-lg shadow-purple-500/50"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    ${pkg.price}
-                  </motion.div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-2">
-                    {pkg.packageName}
-                  </h3>
-                  <p className="text-purple-200/70 text-sm mb-4 line-clamp-2 font-medium">
-                    {pkg.description}
-                  </p>
-
-                  <div className="space-y-2 mb-6">
-                    {pkg.duration && (
-                      <div className="flex items-center gap-2 text-sm text-purple-200/60">
-                        <Clock size={16} className="text-cyan-400" />
-                        <span className="font-medium">{pkg.duration}</span>
-                      </div>
-                    )}
-                    {pkg.groupType && (
-                      <div className="flex items-center gap-2 text-sm text-purple-200/60">
-                        <Users size={16} className="text-pink-400" />
-                        <span className="font-medium">{pkg.groupType}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <Link
-                    to={`/packages/${pkg._id}`}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black py-3 rounded-lg transition-all duration-200 transform hover:scale-105 inline-block text-center shadow-lg shadow-purple-500/50"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-purple-200/60 text-lg">No packages available yet. Check back soon!</p>
-          </div>
-        )}
+            View All Packages <ArrowRight size={18} />
+          </Link>
+        </div>
       </section>
-      {/* Testimonials Section */}
-      <section className="max-w-[100rem] mx-auto px-6 py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
-            What Our Travelers Say
-          </h2>
-          <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
-            Real experiences from real travelers who've had the time of their lives
-          </p>
-        </motion.div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-gradient-to-br from-purple-900/50 to-slate-900/50 rounded-2xl h-80 animate-pulse border border-purple-500/30"></div>
-            ))}
-          </div>
-        ) : testimonials.length > 0 ? (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {testimonials.map((testimonial) => (
-              <motion.div
-                key={testimonial._id}
-                variants={itemVariants}
-                className="group bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-4 backdrop-blur-sm p-8 flex flex-col"
-              >
-                {/* Rating Stars */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={20}
-                      className={i < (testimonial.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-purple-400/30'}
-                    />
-                  ))}
-                </div>
-
-                {/* Review Text */}
-                <p className="text-purple-200/80 font-medium mb-6 flex-grow italic">
-                  "{testimonial.reviewText}"
-                </p>
-
-                {/* Customer Info */}
-                <div className="flex items-center gap-4 pt-6 border-t border-purple-500/30">
-                  {testimonial.customerImage && (
-                    <Image
-                      src={testimonial.customerImage}
-                      alt={testimonial.customerName || 'Customer'}
-                      className="w-12 h-12 rounded-full object-cover"
-                      width={48}
-                    />
-                  )}
-                  <div>
-                    <h4 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400">
-                      {testimonial.customerName}
-                    </h4>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-purple-200/60 text-lg">No testimonials available yet. Be the first to share your experience!</p>
-          </div>
-        )}
-      </section>
-      {/* Why Choose Us Section */}
-      <section className="py-20 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/30 to-transparent"></div>
-        <div className="max-w-[100rem] mx-auto px-6 relative z-10">
+      {/* ── WHY BALI FLOCK ── */}
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-[100rem] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-14"
           >
-            <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4">
-              Why Choose Bali Flock
-            </h2>
-            <p className="text-lg text-purple-200/80 max-w-2xl mx-auto font-semibold">
-              We're committed to creating unforgettable party experiences
-            </p>
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Why Choose Us</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">Built Different</h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">We're not a booking platform. We're your NZ crew who organise everything end to end.</p>
           </motion.div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              {
-                icon: Flame,
-                title: 'Epic Venues',
-                description: 'Access to the hottest beach clubs and party spots',
-              },
-              {
-                icon: Music,
-                title: 'VIP Experience',
-                description: 'Premium tables, exclusive events, and special access',
-              },
-              {
-                icon: Users,
-                title: 'Party Crew',
-                description: 'Meet fellow travelers and make lifelong friends',
-              },
-              {
-                icon: Zap,
-                title: '24/7 Support',
-                description: 'Round-the-clock party coordination and assistance',
-              },
-            ].map((feature, index) => {
-              const Icon = feature.icon;
+              { icon: Shield, title: 'NZ Licensed Security Available', desc: 'Add a NZ-licensed security guard to keep your group safe and on schedule — with our signature roll-call system.' },
+              { icon: Clock, title: 'Quote in 24 Hours', desc: 'Fill in your details and we'll have a personalised, fully itemised quote in your inbox within 24 hours.' },
+              { icon: Users, title: 'Every Group Catered For', desc: 'Boys, girls, families, couples, hens, bucks — we've built the perfect package for every type of group.' },
+              { icon: CheckCircle2, title: 'All Transport Included', desc: 'Airport pickup, all activity transfers, and airport drop-off. You never need to worry about getting around.' },
+              { icon: CheckCircle2, title: 'Breakfast & Lunch on Activity Days', desc: 'Every activity day includes breakfast and lunch. No scrambling to find food between adventures.' },
+              { icon: CheckCircle2, title: 'Fully Customisable', desc: 'Swap free days for activities, add scooter hire, tattoo studio, security, tour guide — build your perfect trip.' },
+            ].map((item, index) => {
+              const Icon = item.icon;
               return (
                 <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="bg-gradient-to-br from-purple-900/40 to-slate-900/40 border border-purple-500/30 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:shadow-purple-500/50 transition-all duration-300 text-center backdrop-blur-sm group"
-                  whileHover={{ y: -10 }}
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-white p-7 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <motion.div 
-                    className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-500/50 group-hover:shadow-pink-500/50"
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                  >
-                    <Icon size={32} className="text-white" />
-                  </motion.div>
-                  <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-purple-200/70 font-medium">{feature.description}</p>
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                    <Icon size={24} className="text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
                 </motion.div>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </section>
-      {/* CTA Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-cyan-600/20"></div>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="max-w-[100rem] mx-auto px-6 py-20">
         <motion.div
-          className="absolute top-0 left-1/3 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl"
-          animate={{ 
-            y: [0, 50, 0],
-            opacity: [0.3, 0.6, 0.3]
-          }}
-          transition={{ duration: 6, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/3 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl"
-          animate={{ 
-            y: [0, -50, 0],
-            opacity: [0.3, 0.6, 0.3]
-          }}
-          transition={{ duration: 7, repeat: Infinity, delay: 1 }}
-        />
-        
-        <div className="max-w-[100rem] mx-auto px-6 text-center relative z-10">
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-14"
+        >
+          <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">The Process</p>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">How It Works</h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">From quote to landing in Bali in 5 simple steps.</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          {HOW_IT_WORKS.map((item, index) => (
+            <motion.div
+              key={item.step}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="text-center relative"
+            >
+              {index < HOW_IT_WORKS.length - 1 && (
+                <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-gray-200 z-0" />
+              )}
+              <div className="relative z-10 inline-flex items-center justify-center w-16 h-16 bg-primary text-white font-black text-xl rounded-2xl mb-4 shadow-lg">
+                {item.step}
+              </div>
+              <h3 className="font-bold text-gray-900 mb-2 text-sm">{item.title}</h3>
+              <p className="text-gray-500 text-xs leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── REVIEWS ── */}
+      <section className="bg-gray-900 py-20">
+        <div className="max-w-[100rem] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Reviews</p>
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4">What Our Travellers Say</h2>
+            <div className="flex items-center justify-center gap-1 mb-2">
+              {[1,2,3,4,5].map(i => <Star key={i} size={20} className="text-yellow-400 fill-yellow-400" />)}
+            </div>
+            <p className="text-gray-400">Rated 4.9/5 from 500+ happy travellers</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {REVIEWS.map((review, index) => (
+              <motion.div
+                key={review.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gray-800 rounded-2xl p-7 border border-gray-700"
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[1,2,3,4,5].map(i => <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />)}
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed mb-5 italic">"{review.review}"</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-white text-sm">{review.name}</p>
+                    <p className="text-gray-500 text-xs">{review.location}</p>
+                  </div>
+                  <span className="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full font-semibold">
+                    {review.trip}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="bg-gradient-to-r from-primary to-secondary py-20">
+        <div className="max-w-[100rem] mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 mb-6">
-              Ready for the Ultimate Party?
-            </h2>
-            <p className="text-xl text-purple-200/90 mb-8 max-w-2xl mx-auto font-semibold">
-              Book your Bali party experience today and create memories that last a lifetime.
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4">Ready to Go?</h2>
+            <p className="text-white/80 text-lg mb-10 max-w-xl mx-auto">
+              Get your personalised Bali quote within 24 hours. No commitment, no obligation.
             </p>
-            <motion.button 
-              className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black px-12 py-4 rounded-full transition-all duration-200 inline-flex items-center gap-2 shadow-lg shadow-purple-500/50"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start Booking <ArrowRight size={20} />
-            </motion.button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/packages"
+                className="inline-flex items-center justify-center gap-2 bg-white text-primary font-black px-10 py-4 rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105 text-lg"
+              >
+                Get My Quote <ArrowRight size={20} />
+              </Link>
+              <Link
+                to="/faq"
+                className="inline-flex items-center justify-center gap-2 border-2 border-white/40 hover:border-white text-white font-bold px-10 py-4 rounded-lg transition-all text-lg"
+              >
+                Read the FAQ
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
+
       <Footer />
     </div>
   );
