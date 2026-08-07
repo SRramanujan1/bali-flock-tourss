@@ -7,7 +7,7 @@ import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
-import { convertPrice, formatPrice, useCurrencyStore } from '@/store/currencyStore';
+import { useCurrencyStore } from '@/store/currencyStore';
 
 // ============================================================
 // BALI FLOCK TOURS — HOMEPAGE
