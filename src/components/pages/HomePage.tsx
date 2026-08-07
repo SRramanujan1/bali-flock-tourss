@@ -7,7 +7,7 @@ import { HolidayPackages } from '@/entities';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
-import { useCurrencyStore } from '@/store/currencyStore';
+
 
 // ============================================================
 // BALI FLOCK TOURS — HOMEPAGE
@@ -97,7 +97,7 @@ const HOW_IT_WORKS = [
 
 export default function HomePage() {
   const [packages, setPackages] = useState<HolidayPackages[]>([]);
-  const { selectedCurrency } = useCurrencyStore();
+
 
   useEffect(() => {
     const fetchPackages = async () => {
