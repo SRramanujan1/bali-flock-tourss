@@ -89,10 +89,10 @@ const PACKAGES_PREVIEW = [
 
 const HOW_IT_WORKS = [
   { step: '01', title: 'Pick your package', desc: 'Choose from our 4 curated packages or build your own.' },
-  { step: '02', title: 'Get your quote', desc: 'Fill in your details. We'll have a personalised quote to you within 24 hours.' },
+  { step: '02', title: 'Get your quote', desc: "Fill in your details. We'll have a personalised quote to you within 24 hours." },
   { step: '03', title: 'Lock it in', desc: 'Confirm the quote and pay your $1,000 NZD deposit per person.' },
   { step: '04', title: 'We handle everything', desc: 'Flights, accommodation, activities, transport — all sorted by us.' },
-  { step: '05', title: 'You just show up', desc: 'Land in Bali and enjoy. We'll be there every step of the way.' },
+  { step: '05', title: 'You just show up', desc: "Land in Bali and enjoy. We'll be there every step of the way." },
 ];
 
 export default function HomePage() {
@@ -249,8 +249,8 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { icon: Shield, title: 'NZ Licensed Security Available', desc: 'Add a NZ-licensed security guard to keep your group safe and on schedule — with our signature roll-call system.' },
-              { icon: Clock, title: 'Quote in 24 Hours', desc: 'Fill in your details and we'll have a personalised, fully itemised quote in your inbox within 24 hours.' },
-              { icon: Users, title: 'Every Group Catered For', desc: 'Boys, girls, families, couples, hens, bucks — we've built the perfect package for every type of group.' },
+              { icon: Clock, title: 'Quote in 24 Hours', desc: "Fill in your details and we'll have a personalised, fully itemised quote in your inbox within 24 hours." },
+              { icon: Users, title: 'Every Group Catered For', desc: "Boys, girls, families, couples, hens, bucks — we've built the perfect package for every type of group." },
               { icon: CheckCircle2, title: 'All Transport Included', desc: 'Airport pickup, all activity transfers, and airport drop-off. You never need to worry about getting around.' },
               { icon: CheckCircle2, title: 'Breakfast & Lunch on Activity Days', desc: 'Every activity day includes breakfast and lunch. No scrambling to find food between adventures.' },
               { icon: CheckCircle2, title: 'Fully Customisable', desc: 'Swap free days for activities, add scooter hire, tattoo studio, security, tour guide — build your perfect trip.' },
